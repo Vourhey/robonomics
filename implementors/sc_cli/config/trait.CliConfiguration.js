@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["robonomics_cli"] = [{"text":"impl CliConfiguration&lt;<a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.unit.html\">()</a>&gt; for <a class=\"struct\" href=\"robonomics_cli/struct.IoCmd.html\" title=\"struct robonomics_cli::IoCmd\">IoCmd</a>","synthetic":false,"types":["robonomics_cli::io::IoCmd"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

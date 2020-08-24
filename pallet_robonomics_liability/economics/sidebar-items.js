@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Communism","Well, when we get communism it'll all be fucking great. It will come soon, we just have to wait. Everything will be free there, everything will be an upper. We'll probably not even have to die."],["OpenMarket","Open market as approach for liability price estimation."]]});

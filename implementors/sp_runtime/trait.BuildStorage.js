@@ -1,0 +1,5 @@
+(function() {var implementors = {};
+implementors["ipci_runtime"] = [{"text":"impl BuildStorage for <a class=\"struct\" href=\"ipci_runtime/struct.GenesisConfig.html\" title=\"struct ipci_runtime::GenesisConfig\">GenesisConfig</a>","synthetic":false,"types":["ipci_runtime::GenesisConfig"]}];
+implementors["robonomics_parachain_runtime"] = [{"text":"impl BuildStorage for <a class=\"struct\" href=\"robonomics_parachain_runtime/struct.GenesisConfig.html\" title=\"struct robonomics_parachain_runtime::GenesisConfig\">GenesisConfig</a>","synthetic":false,"types":["robonomics_parachain_runtime::GenesisConfig"]}];
+implementors["robonomics_runtime"] = [{"text":"impl BuildStorage for <a class=\"struct\" href=\"robonomics_runtime/struct.GenesisConfig.html\" title=\"struct robonomics_runtime::GenesisConfig\">GenesisConfig</a>","synthetic":false,"types":["robonomics_runtime::GenesisConfig"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

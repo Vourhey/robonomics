@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["submit","Sign datalog record and send using remote Robonomics node."]]});

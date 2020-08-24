@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Call","Dispatchable calls."],["RawEvent","Events for this module."]],"struct":[["Module",""]],"trait":[["LaunchMessage","Robot launch XCMP message trait."],["Trait","Launch module main trait."]],"type":[["Event","[`RawEvent`] specialized for the configuration [`Trait`]"]]});

@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["robonomics_protocol"] = [{"text":"impl&lt;'a, T:&nbsp;<a class=\"trait\" href=\"robonomics_protocol/runtime/pallet_datalog/trait.Datalog.html\" title=\"trait robonomics_protocol::runtime::pallet_datalog::Datalog\">Datalog</a>&gt; Store&lt;T&gt; for <a class=\"struct\" href=\"robonomics_protocol/runtime/pallet_datalog/struct.DatalogStore.html\" title=\"struct robonomics_protocol::runtime::pallet_datalog::DatalogStore\">DatalogStore</a>&lt;'a, T&gt;","synthetic":false,"types":["robonomics_protocol::runtime::pallet_datalog::DatalogStore"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
