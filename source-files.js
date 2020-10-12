@@ -6,6 +6,7 @@ sourcesIndex["node_rpc"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_robonomics_datalog"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_robonomics_launch"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_robonomics_liability"] = {"name":"","files":["economics.rs","lib.rs","signed.rs","technics.rs","traits.rs"]};
+sourcesIndex["pallet_robonomics_rws"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["robonomics"] = {"name":"","files":["main.rs"]};
 sourcesIndex["robonomics_cli"] = {"name":"","files":["error.rs","io.rs","lib.rs","sink.rs","source.rs"]};
 sourcesIndex["robonomics_io"] = {"name":"","dirs":[{"name":"sink","files":["virt.rs"]},{"name":"source","files":["serial.rs","virt.rs"]}],"files":["error.rs","lib.rs","sink.rs","source.rs"]};

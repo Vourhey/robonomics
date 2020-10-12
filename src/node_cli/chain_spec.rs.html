@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `bin/node/cli/src/chain_spec.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>chain_spec.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../node_cli/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `bin/node/cli/src/chain_spec.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>chain_spec.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../node_cli/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -286,8 +287,6 @@
 <span id="286">286</span>
 <span id="287">287</span>
 <span id="288">288</span>
-<span id="289">289</span>
-<span id="290">290</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -336,27 +335,25 @@
     <span class="doccomment">/// DAO IPCI (ipci.io) chain (https://telemetry.polkadot.io/#list/DAO%20IPCI).</span>
     <span class="ident">DaoIpci</span>,
     <span class="doccomment">/// Robonomics Network parachain (https://telemetry.polkadot.io/#list/Robonomics).</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parachain&quot;</span>)]</span>
     <span class="ident">Parachain</span>,
 }
 
 <span class="doccomment">/// Robonomics family chains idetify.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">RobonomicsChain</span> {
-    <span class="kw">fn</span> <span class="ident">family</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">RobonomicsFamily</span>;
+    <span class="kw">fn</span> <span class="ident">family</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RobonomicsFamily</span>;
 }
 
-<span class="kw">impl</span> <span class="ident">RobonomicsChain</span> <span class="kw">for</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">sc_chain_spec</span>::<span class="ident">ChainSpec</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">family</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">RobonomicsFamily</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span>() <span class="op">==</span> <span class="ident">DAO_IPCI_ID</span> {
+<span class="kw">impl</span> <span class="ident">RobonomicsChain</span> <span class="kw">for</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">sc_chain_spec</span>::<span class="ident">ChainSpec</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">family</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RobonomicsFamily</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">DAO_IPCI_ID</span> {
             <span class="kw">return</span> <span class="ident">RobonomicsFamily</span>::<span class="ident">DaoIpci</span>;
         }
 
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parachain&quot;</span>)]</span>
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span>() <span class="op">==</span> <span class="kw">crate</span>::<span class="ident">parachain</span>::<span class="ident">chain_spec</span>::<span class="ident">ROBONOMICS_PARACHAIN_ID</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span>() <span class="op">=</span><span class="op">=</span> <span class="kw">crate</span>::<span class="ident">parachain</span>::<span class="ident">chain_spec</span>::<span class="ident">ROBONOMICS_PARACHAIN_ID</span> {
             <span class="kw">return</span> <span class="ident">RobonomicsFamily</span>::<span class="ident">Parachain</span>;
         }
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span>() <span class="op">==</span> <span class="string">&quot;dev&quot;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span>() <span class="op">=</span><span class="op">=</span> <span class="string">&quot;dev&quot;</span> {
             <span class="kw">return</span> <span class="ident">RobonomicsFamily</span>::<span class="ident">Development</span>;
         }
 
@@ -394,16 +391,16 @@ const IPCI_PROPERTIES: &amp;str = r#&quot;
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ChainSpec</span> <span class="op">=</span> <span class="ident">sc_service</span>::<span class="ident">GenericChainSpec</span><span class="op">&lt;</span><span class="ident">GenesisConfig</span>, <span class="ident">Extensions</span><span class="op">&gt;</span>;
 
 <span class="doccomment">/// Helper function to generate a crypto pair from seed</span>
-<span class="kw">fn</span> <span class="ident">get_from_seed</span><span class="op">&lt;</span><span class="ident">TPublic</span>: <span class="ident">Public</span><span class="op">&gt;</span>(<span class="ident">seed</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="op">&lt;</span><span class="ident">TPublic</span>::<span class="ident">Pair</span> <span class="kw">as</span> <span class="ident">Pair</span><span class="op">&gt;</span>::<span class="ident">Public</span> {
+<span class="kw">fn</span> <span class="ident">get_from_seed</span><span class="op">&lt;</span><span class="ident">TPublic</span>: <span class="ident">Public</span><span class="op">&gt;</span>(<span class="ident">seed</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="op">&lt;</span><span class="ident">TPublic</span>::<span class="ident">Pair</span> <span class="kw">as</span> <span class="ident">Pair</span><span class="op">&gt;</span>::<span class="ident">Public</span> {
     <span class="ident">TPublic</span>::<span class="ident">Pair</span>::<span class="ident">from_string</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;//{}&quot;</span>, <span class="ident">seed</span>), <span class="prelude-val">None</span>)
         .<span class="ident">expect</span>(<span class="string">&quot;static values are valid; qed&quot;</span>)
         .<span class="ident">public</span>()
 }
 
 <span class="doccomment">/// Helper function to generate an account ID from seed</span>
-<span class="kw">fn</span> <span class="ident">get_account_id_from_seed</span><span class="op">&lt;</span><span class="ident">TPublic</span>: <span class="ident">Public</span><span class="op">&gt;</span>(<span class="ident">seed</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">AccountId</span>
+<span class="kw">fn</span> <span class="ident">get_account_id_from_seed</span><span class="op">&lt;</span><span class="ident">TPublic</span>: <span class="ident">Public</span><span class="op">&gt;</span>(<span class="ident">seed</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">AccountId</span>
 <span class="kw">where</span>
-    <span class="ident">AccountPublic</span>: <span class="ident">From</span><span class="op">&lt;&lt;</span><span class="ident">TPublic</span>::<span class="ident">Pair</span> <span class="kw">as</span> <span class="ident">Pair</span><span class="op">&gt;</span>::<span class="ident">Public</span><span class="op">&gt;</span>,
+    <span class="ident">AccountPublic</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">TPublic</span>::<span class="ident">Pair</span> <span class="kw">as</span> <span class="ident">Pair</span><span class="op">&gt;</span>::<span class="ident">Public</span><span class="op">&gt;</span>,
 {
     <span class="ident">AccountPublic</span>::<span class="ident">from</span>(<span class="ident">get_from_seed</span>::<span class="op">&lt;</span><span class="ident">TPublic</span><span class="op">&gt;</span>(<span class="ident">seed</span>)).<span class="ident">into_account</span>()
 }
@@ -411,7 +408,7 @@ const IPCI_PROPERTIES: &amp;str = r#&quot;
 <span class="doccomment">/// Helper function to generate stash, controller and session key from seed</span>
 <span class="kw">fn</span> <span class="ident">get_authority_keys_from_seed</span>(
     <span class="ident">seed</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-) <span class="op">-&gt;</span> (
+) <span class="op">-</span><span class="op">&gt;</span> (
     <span class="ident">AccountId</span>,
     <span class="ident">AccountId</span>,
     <span class="ident">BabeId</span>,
@@ -434,7 +431,7 @@ const IPCI_PROPERTIES: &amp;str = r#&quot;
     <span class="ident">grandpa</span>: <span class="ident">GrandpaId</span>,
     <span class="ident">im_online</span>: <span class="ident">ImOnlineId</span>,
     <span class="ident">authority_discovery</span>: <span class="ident">AuthorityDiscoveryId</span>,
-) <span class="op">-&gt;</span> <span class="ident">SessionKeys</span> {
+) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SessionKeys</span> {
     <span class="ident">SessionKeys</span> {
         <span class="ident">babe</span>,
         <span class="ident">grandpa</span>,
@@ -452,13 +449,13 @@ const IPCI_PROPERTIES: &amp;str = r#&quot;
         <span class="ident">ImOnlineId</span>,
         <span class="ident">AuthorityDiscoveryId</span>,
     )<span class="op">&gt;</span>,
-    <span class="ident">endowed_accounts</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;&gt;</span>,
+    <span class="ident">endowed_accounts</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">sudo_key</span>: <span class="ident">AccountId</span>,
-) <span class="op">-&gt;</span> <span class="ident">GenesisConfig</span> {
+) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GenesisConfig</span> {
     <span class="kw">const</span> <span class="ident">ENDOWMENT</span>: <span class="ident">Balance</span> <span class="op">=</span> <span class="number">1_000_000_000_000_000_000</span>;
 
     <span class="kw">let</span> <span class="ident">endowed_accounts</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">AccountId</span>, <span class="ident">Balance</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">endowed_accounts</span>
-        .<span class="ident">unwrap_or_else</span>(<span class="op">||</span> {
+        .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> {
             <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="ident">get_account_id_from_seed</span>::<span class="op">&lt;</span><span class="ident">sr25519</span>::<span class="ident">Public</span><span class="op">&gt;</span>(<span class="string">&quot;Alice&quot;</span>),
                 <span class="ident">get_account_id_from_seed</span>::<span class="op">&lt;</span><span class="ident">sr25519</span>::<span class="ident">Public</span><span class="op">&gt;</span>(<span class="string">&quot;Bob&quot;</span>),
@@ -500,7 +497,7 @@ const IPCI_PROPERTIES: &amp;str = r#&quot;
     <span class="ident">endowed_accounts</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">AccountId</span>, <span class="ident">Balance</span>)<span class="op">&gt;</span>,
     <span class="ident">sudo_key</span>: <span class="ident">AccountId</span>,
     <span class="ident">code</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-) <span class="op">-&gt;</span> <span class="ident">GenesisConfig</span> {
+) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GenesisConfig</span> {
     <span class="kw">const</span> <span class="ident">STASH</span>: <span class="ident">Balance</span> <span class="op">=</span> <span class="number">1_000_000</span>;
     <span class="ident">GenesisConfig</span> {
         <span class="ident">frame_system</span>: <span class="prelude-val">Some</span>(<span class="ident">SystemConfig</span> {
@@ -525,7 +522,7 @@ const IPCI_PROPERTIES: &amp;str = r#&quot;
                         <span class="ident">session_keys</span>(<span class="ident">x</span>.<span class="number">2</span>.<span class="ident">clone</span>(), <span class="ident">x</span>.<span class="number">3</span>.<span class="ident">clone</span>(), <span class="ident">x</span>.<span class="number">4</span>.<span class="ident">clone</span>(), <span class="ident">x</span>.<span class="number">5</span>.<span class="ident">clone</span>()),
                     )
                 })
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>(),
+                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
         }),
         <span class="ident">pallet_staking</span>: <span class="prelude-val">Some</span>(<span class="ident">StakingConfig</span> {
             <span class="ident">validator_count</span>: <span class="number">10</span>,
@@ -554,13 +551,13 @@ const IPCI_PROPERTIES: &amp;str = r#&quot;
 }
 
 <span class="doccomment">/// IPCI blockchain config.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ipci_config</span>() <span class="op">-&gt;</span> <span class="ident">ChainSpec</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ipci_config</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ChainSpec</span> {
     <span class="ident">ChainSpec</span>::<span class="ident">from_json_bytes</span>(<span class="kw-2">&amp;</span><span class="macro">include_bytes</span><span class="macro">!</span>(<span class="string">&quot;../res/ipci.json&quot;</span>)[..]).<span class="ident">unwrap</span>()
 }
 
 <span class="doccomment">/// Development config (single validator Alice)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">development_config</span>() <span class="op">-&gt;</span> <span class="ident">ChainSpec</span> {
-    <span class="kw">let</span> <span class="ident">genesis</span> <span class="op">=</span> <span class="op">||</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">development_config</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ChainSpec</span> {
+    <span class="kw">let</span> <span class="ident">genesis</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> {
         <span class="ident">development_genesis</span>(
             <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">get_authority_keys_from_seed</span>(<span class="string">&quot;Alice&quot;</span>)],
             <span class="prelude-val">None</span>,

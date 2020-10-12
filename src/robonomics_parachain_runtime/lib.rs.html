@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `bin/node/robonomics-runtime/parachain/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../robonomics_parachain_runtime/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `bin/node/robonomics-runtime/parachain/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../robonomics_parachain_runtime/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -619,6 +620,13 @@
 <span id="619">619</span>
 <span id="620">620</span>
 <span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -648,7 +656,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
 <span class="doccomment">/// Wasm binary unwrapped. If built with `BUILD_DUMMY_WASM_BINARY`, the function panics.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_binary_unwrap</span>() <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="ident">u8</span>] {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_binary_unwrap</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="ident">u8</span>] {
     <span class="ident">WASM_BINARY</span>.<span class="ident">expect</span>(
         <span class="string">&quot;Development wasm binary is not available. This means the client is \
                         built with `BUILD_DUMMY_WASM_BINARY` flag and it is only usable for \
@@ -707,7 +715,7 @@
 
 <span class="doccomment">/// The version infromation used to identify this runtime when compiled natively.</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">native_version</span>() <span class="op">-&gt;</span> <span class="ident">NativeVersion</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">native_version</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">NativeVersion</span> {
     <span class="ident">NativeVersion</span> {
         <span class="ident">runtime_version</span>: <span class="ident">VERSION</span>,
         <span class="ident">can_author_with</span>: <span class="ident">Default</span>::<span class="ident">default</span>(),
@@ -864,8 +872,8 @@
     <span class="kw">type</span> <span class="ident">MaxAdditionalFields</span> <span class="op">=</span> <span class="ident">MaxAdditionalFields</span>;
     <span class="kw">type</span> <span class="ident">MaxRegistrars</span> <span class="op">=</span> <span class="ident">MaxRegistrars</span>;
     <span class="kw">type</span> <span class="ident">Slashed</span> <span class="op">=</span> ();
-    <span class="kw">type</span> <span class="ident">ForceOrigin</span> <span class="op">=</span> <span class="ident">frame_system</span>::<span class="ident">EnsureRoot</span><span class="op">&lt;&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">AccountId</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">RegistrarOrigin</span> <span class="op">=</span> <span class="ident">frame_system</span>::<span class="ident">EnsureRoot</span><span class="op">&lt;&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">AccountId</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">ForceOrigin</span> <span class="op">=</span> <span class="ident">frame_system</span>::<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">AccountId</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">RegistrarOrigin</span> <span class="op">=</span> <span class="ident">frame_system</span>::<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">AccountId</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> ();
 }
 
@@ -967,19 +975,11 @@
 
 <span class="kw">impl</span> <span class="ident">cumulus_message_broker</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
-    <span class="kw">type</span> <span class="ident">DownwardMessageHandlers</span> <span class="op">=</span> <span class="ident">TokenDealer</span>;
+    <span class="kw">type</span> <span class="ident">DownwardMessageHandlers</span> <span class="op">=</span> ();
     <span class="kw">type</span> <span class="ident">UpwardMessage</span> <span class="op">=</span> <span class="ident">cumulus_upward_message</span>::<span class="ident">RococoUpwardMessage</span>;
     <span class="kw">type</span> <span class="ident">ParachainId</span> <span class="op">=</span> <span class="ident">ParachainInfo</span>;
-    <span class="kw">type</span> <span class="ident">XCMPMessage</span> <span class="op">=</span> <span class="ident">cumulus_token_dealer</span>::<span class="ident">XCMPMessage</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">Balance</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">XCMPMessageHandlers</span> <span class="op">=</span> <span class="ident">TokenDealer</span>;
-}
-
-<span class="kw">impl</span> <span class="ident">cumulus_token_dealer</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
-    <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
-    <span class="kw">type</span> <span class="ident">UpwardMessageSender</span> <span class="op">=</span> <span class="ident">MessageBroker</span>;
-    <span class="kw">type</span> <span class="ident">UpwardMessage</span> <span class="op">=</span> <span class="ident">cumulus_upward_message</span>::<span class="ident">RococoUpwardMessage</span>;
-    <span class="kw">type</span> <span class="ident">Currency</span> <span class="op">=</span> <span class="ident">Balances</span>;
-    <span class="kw">type</span> <span class="ident">XCMPMessageSender</span> <span class="op">=</span> <span class="ident">MessageBroker</span>;
+    <span class="kw">type</span> <span class="ident">XCMPMessage</span> <span class="op">=</span> <span class="ident">pallet_robonomics_launch</span>::<span class="ident">XCMPMessage</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">AccountId</span>, <span class="ident">bool</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">XCMPMessageHandlers</span> <span class="op">=</span> <span class="ident">Launch</span>;
 }
 
 <span class="kw">impl</span> <span class="ident">parachain_info</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {}
@@ -1004,20 +1004,35 @@
 }
 
 <span class="kw">impl</span> <span class="ident">pallet_robonomics_launch</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+    <span class="kw">type</span> <span class="ident">XCMPMessageSender</span> <span class="op">=</span> <span class="ident">MessageBroker</span>;
     <span class="kw">type</span> <span class="ident">Parameter</span> <span class="op">=</span> <span class="ident">bool</span>;
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
+}
+
+<span class="macro">parameter_types</span><span class="macro">!</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">TotalBandwidth</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">100</span>; <span class="comment">// 100 TPS allocated for RWS transactions</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">WeightLimit</span>: <span class="ident">Weight</span> <span class="op">=</span> <span class="number">1_000_000_000_000_000</span>;
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">PointsLimit</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">10_000_000_000</span>; <span class="comment">// equal to 10 TPS</span>
+}
+
+<span class="kw">impl</span> <span class="ident">pallet_robonomics_rws</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+    <span class="kw">type</span> <span class="ident">TotalBandwidth</span> <span class="op">=</span> <span class="ident">TotalBandwidth</span>;
+    <span class="kw">type</span> <span class="ident">WeightLimit</span> <span class="op">=</span> <span class="ident">WeightLimit</span>;
+    <span class="kw">type</span> <span class="ident">PointsLimit</span> <span class="op">=</span> <span class="ident">PointsLimit</span>;
+    <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
+    <span class="kw">type</span> <span class="ident">Call</span> <span class="op">=</span> <span class="ident">Call</span>;
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">LocalCall</span><span class="op">&gt;</span> <span class="ident">frame_system</span>::<span class="ident">offchain</span>::<span class="ident">CreateSignedTransaction</span><span class="op">&lt;</span><span class="ident">LocalCall</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Runtime</span>
 <span class="kw">where</span>
     <span class="ident">Call</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">LocalCall</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">create_transaction</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">frame_system</span>::<span class="ident">offchain</span>::<span class="ident">AppCrypto</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Public</span>, <span class="self">Self</span>::<span class="ident">Signature</span><span class="op">&gt;&gt;</span>(
+    <span class="kw">fn</span> <span class="ident">create_transaction</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">frame_system</span>::<span class="ident">offchain</span>::<span class="ident">AppCrypto</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Public</span>, <span class="self">Self</span>::<span class="ident">Signature</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="ident">call</span>: <span class="ident">Call</span>,
         <span class="ident">public</span>: <span class="op">&lt;</span><span class="ident">Signature</span> <span class="kw">as</span> <span class="ident">traits</span>::<span class="ident">Verify</span><span class="op">&gt;</span>::<span class="ident">Signer</span>,
         <span class="ident">account</span>: <span class="ident">AccountId</span>,
         <span class="ident">nonce</span>: <span class="ident">Index</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(
         <span class="ident">Call</span>,
         <span class="op">&lt;</span><span class="ident">UncheckedExtrinsic</span> <span class="kw">as</span> <span class="ident">traits</span>::<span class="ident">Extrinsic</span><span class="op">&gt;</span>::<span class="ident">SignaturePayload</span>,
     )<span class="op">&gt;</span> {
@@ -1097,12 +1112,12 @@
         <span class="ident">Liability</span>: <span class="ident">pallet_robonomics_liability</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">ValidateUnsigned</span>},
         <span class="ident">Datalog</span>: <span class="ident">pallet_robonomics_datalog</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>},
         <span class="ident">Launch</span>: <span class="ident">pallet_robonomics_launch</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>},
+        <span class="ident">RWS</span>: <span class="ident">pallet_robonomics_rws</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>},
 
         <span class="comment">// Parachain modules.</span>
         <span class="ident">ParachainUpgrade</span>: <span class="ident">cumulus_parachain_upgrade</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Inherent</span>, <span class="ident">Event</span>},
         <span class="ident">ParachainInfo</span>: <span class="ident">parachain_info</span>::{<span class="ident">Module</span>, <span class="ident">Storage</span>, <span class="ident">Config</span>},
         <span class="ident">MessageBroker</span>: <span class="ident">cumulus_message_broker</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Inherent</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>},
-        <span class="ident">TokenDealer</span>: <span class="ident">cumulus_token_dealer</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>},
 
         <span class="comment">// DAO modules</span>
         <span class="ident">Treasury</span>: <span class="ident">pallet_treasury</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Config</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>},
@@ -1156,7 +1171,7 @@
 <span class="comment">// Implement our runtime API endpoints. This is just a bunch of proxying.</span>
 <span class="macro">impl_runtime_apis</span><span class="macro">!</span> {
     <span class="kw">impl</span> <span class="ident">sp_api</span>::<span class="ident">Core</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
-        <span class="kw">fn</span> <span class="ident">version</span>() <span class="op">-&gt;</span> <span class="ident">RuntimeVersion</span> {
+        <span class="kw">fn</span> <span class="ident">version</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RuntimeVersion</span> {
             <span class="ident">VERSION</span>
         }
 
@@ -1170,29 +1185,29 @@
     }
 
     <span class="kw">impl</span> <span class="ident">sp_api</span>::<span class="ident">Metadata</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
-        <span class="kw">fn</span> <span class="ident">metadata</span>() <span class="op">-&gt;</span> <span class="ident">OpaqueMetadata</span> {
+        <span class="kw">fn</span> <span class="ident">metadata</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">OpaqueMetadata</span> {
             <span class="ident">Runtime</span>::<span class="ident">metadata</span>().<span class="ident">into</span>()
         }
     }
 
     <span class="kw">impl</span> <span class="ident">sp_block_builder</span>::<span class="ident">BlockBuilder</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
-        <span class="kw">fn</span> <span class="ident">apply_extrinsic</span>(<span class="ident">extrinsic</span>: <span class="op">&lt;</span><span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span><span class="op">&gt;</span>::<span class="ident">Extrinsic</span>) <span class="op">-&gt;</span> <span class="ident">sp_runtime</span>::<span class="ident">ApplyExtrinsicResult</span> {
+        <span class="kw">fn</span> <span class="ident">apply_extrinsic</span>(<span class="ident">extrinsic</span>: <span class="op">&lt;</span><span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span><span class="op">&gt;</span>::<span class="ident">Extrinsic</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">sp_runtime</span>::<span class="ident">ApplyExtrinsicResult</span> {
             <span class="ident">Executive</span>::<span class="ident">apply_extrinsic</span>(<span class="ident">extrinsic</span>)
         }
 
-        <span class="kw">fn</span> <span class="ident">finalize_block</span>() <span class="op">-&gt;</span> <span class="op">&lt;</span><span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span><span class="op">&gt;</span>::<span class="ident">Header</span> {
+        <span class="kw">fn</span> <span class="ident">finalize_block</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="op">&lt;</span><span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span><span class="op">&gt;</span>::<span class="ident">Header</span> {
             <span class="ident">Executive</span>::<span class="ident">finalize_block</span>()
         }
 
-        <span class="kw">fn</span> <span class="ident">inherent_extrinsics</span>(<span class="ident">data</span>: <span class="ident">sp_inherents</span>::<span class="ident">InherentData</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;&lt;</span><span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span><span class="op">&gt;</span>::<span class="ident">Extrinsic</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">inherent_extrinsics</span>(<span class="ident">data</span>: <span class="ident">sp_inherents</span>::<span class="ident">InherentData</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span><span class="op">&gt;</span>::<span class="ident">Extrinsic</span><span class="op">&gt;</span> {
             <span class="ident">data</span>.<span class="ident">create_extrinsics</span>()
         }
 
-        <span class="kw">fn</span> <span class="ident">check_inherents</span>(<span class="ident">block</span>: <span class="ident">Block</span>, <span class="ident">data</span>: <span class="ident">sp_inherents</span>::<span class="ident">InherentData</span>) <span class="op">-&gt;</span> <span class="ident">sp_inherents</span>::<span class="ident">CheckInherentsResult</span> {
+        <span class="kw">fn</span> <span class="ident">check_inherents</span>(<span class="ident">block</span>: <span class="ident">Block</span>, <span class="ident">data</span>: <span class="ident">sp_inherents</span>::<span class="ident">InherentData</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">sp_inherents</span>::<span class="ident">CheckInherentsResult</span> {
             <span class="ident">data</span>.<span class="ident">check_extrinsics</span>(<span class="kw-2">&amp;</span><span class="ident">block</span>)
         }
 
-        <span class="kw">fn</span> <span class="ident">random_seed</span>() <span class="op">-&gt;</span> <span class="op">&lt;</span><span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span><span class="op">&gt;</span>::<span class="ident">Hash</span> {
+        <span class="kw">fn</span> <span class="ident">random_seed</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="op">&lt;</span><span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span><span class="op">&gt;</span>::<span class="ident">Hash</span> {
             <span class="ident">RandomnessCollectiveFlip</span>::<span class="ident">random_seed</span>()
         }
     }
@@ -1201,7 +1216,7 @@
         <span class="kw">fn</span> <span class="ident">validate_transaction</span>(
             <span class="ident">source</span>: <span class="ident">TransactionSource</span>,
             <span class="ident">tx</span>: <span class="op">&lt;</span><span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span><span class="op">&gt;</span>::<span class="ident">Extrinsic</span>
-        ) <span class="op">-&gt;</span> <span class="ident">TransactionValidity</span> {
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TransactionValidity</span> {
             <span class="ident">Executive</span>::<span class="ident">validate_transaction</span>(<span class="ident">source</span>, <span class="ident">tx</span>)
         }
     }
@@ -1213,7 +1228,7 @@
     }
 
     <span class="kw">impl</span> <span class="ident">frame_system_rpc_runtime_api</span>::<span class="ident">AccountNonceApi</span><span class="op">&lt;</span><span class="ident">Block</span>, <span class="ident">AccountId</span>, <span class="ident">Index</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
-        <span class="kw">fn</span> <span class="ident">account_nonce</span>(<span class="ident">account</span>: <span class="ident">AccountId</span>) <span class="op">-&gt;</span> <span class="ident">Index</span> {
+        <span class="kw">fn</span> <span class="ident">account_nonce</span>(<span class="ident">account</span>: <span class="ident">AccountId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Index</span> {
             <span class="ident">System</span>::<span class="ident">account_nonce</span>(<span class="ident">account</span>)
         }
     }
@@ -1222,19 +1237,19 @@
         <span class="ident">Block</span>,
         <span class="ident">Balance</span>,
     <span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
-        <span class="kw">fn</span> <span class="ident">query_info</span>(<span class="ident">uxt</span>: <span class="op">&lt;</span><span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span><span class="op">&gt;</span>::<span class="ident">Extrinsic</span>, <span class="ident">len</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">RuntimeDispatchInfo</span><span class="op">&lt;</span><span class="ident">Balance</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">query_info</span>(<span class="ident">uxt</span>: <span class="op">&lt;</span><span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span><span class="op">&gt;</span>::<span class="ident">Extrinsic</span>, <span class="ident">len</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RuntimeDispatchInfo</span><span class="op">&lt;</span><span class="ident">Balance</span><span class="op">&gt;</span> {
             <span class="ident">TransactionPayment</span>::<span class="ident">query_info</span>(<span class="ident">uxt</span>, <span class="ident">len</span>)
         }
     }
 
     <span class="kw">impl</span> <span class="ident">sp_session</span>::<span class="ident">SessionKeys</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
-        <span class="kw">fn</span> <span class="ident">generate_session_keys</span>(<span class="ident">seed</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">generate_session_keys</span>(<span class="ident">seed</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
             <span class="ident">SessionKeys</span>::<span class="ident">generate</span>(<span class="ident">seed</span>)
         }
 
         <span class="kw">fn</span> <span class="ident">decode_session_keys</span>(
             <span class="ident">encoded</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-        ) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">KeyTypeId</span>)<span class="op">&gt;&gt;</span> {
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">KeyTypeId</span>)<span class="op">&gt;</span><span class="op">&gt;</span> {
             <span class="ident">SessionKeys</span>::<span class="ident">decode_into_raw_public_keys</span>(<span class="kw-2">&amp;</span><span class="ident">encoded</span>)
         }
     }
