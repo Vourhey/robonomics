@@ -49,7 +49,7 @@ pub struct NewRecordEvent<T: Datalog> {
 
 /// Erease all stored data.
 #[derive(Clone, Debug, Eq, PartialEq, Call, Encode)]
-pub struct EreaseCall<T: Datalog> {
+pub struct EraseCall<T: Datalog> {
     /// Runtime marker.
     pub _runtime: PhantomData<T>,
 }

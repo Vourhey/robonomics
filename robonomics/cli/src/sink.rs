@@ -54,6 +54,15 @@ pub enum SinkCmd {
         #[structopt(short, value_name = "SECRET_URI")]
         suri: String,
     },
+    /// Erase data from blockchain command.
+    Erase {
+        /// Substrate node WebSocket endpoint.
+        #[structopt(long, value_name = "REMOTE_URI", default_value = "ws://localhost:9944")]
+        remote: String,
+        /// Sender account seed URI.
+        #[structopt(short, value_name = "SECRET_URI")]
+        suri: String,
+    },
     /// Upload data into IPFS storage.
     Ipfs,
     /// CPS launch subsystem command.
@@ -96,6 +105,12 @@ impl SinkCmd {
             }
             SinkCmd::Datalog { remote, suri } => {
                 let (submit, hashes) = virt::datalog(remote, suri)?;
+                task::spawn(stdin().forward(submit));
+                let hex_encoded = hashes.map(|r| r.map(|h| hex::encode(h)));
+                task::block_on(hex_encoded.forward(virt::stdout()))?;
+            }
+            SinkCmd::Erase { remote, suri } => {
+                let (submit, hashes) = virt::erase(remote, suri)?;
                 task::spawn(stdin().forward(submit));
                 let hex_encoded = hashes.map(|r| r.map(|h| hex::encode(h)));
                 task::block_on(hex_encoded.forward(virt::stdout()))?;

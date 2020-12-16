@@ -44,3 +44,24 @@ where
     );
     Ok(xt_hash.into())
 }
+
+/// Sign datalog erase and send using remote Robonomics node.
+pub async fn submit_erase<T: Pair>(signer: T, remote: String) -> Result<[u8; 32]>
+where
+    sp_runtime::MultiSigner: From<<T as Pair>::Public>,
+    sp_runtime::MultiSignature: From<<T as Pair>::Signature>,
+    <T as Pair>::Signature: codec::Codec,
+{
+    let subxt_signer = PairSigner::new(signer);
+    let client = substrate_subxt::ClientBuilder::<Robonomics>::new()
+        .set_url(remote.as_str())
+        .build()
+        .await?;
+    let xt_hash = client.erase(&subxt_signer).await?;
+    log::debug!(
+        target: "robonomics-datalog",
+        "Data erase submited in extrinsic with hash {}", xt_hash
+    );
+    Ok(xt_hash.into())
+}
+

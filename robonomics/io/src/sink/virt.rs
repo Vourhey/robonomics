@@ -91,6 +91,24 @@ pub fn datalog<T: Into<Vec<u8>>>(
     Ok((sender.sink_err_into(), hashes))
 }
 
+/// Erase data from an account.
+///
+pub fn erase<T: Into<Vec<u8>>>(
+    remote: String,
+    suri: String,
+) -> Result<(
+    impl Sink<T, Error = Error>,
+    impl Stream<Item = Result<[u8; 32]>>,
+)> {
+    let pair = sr25519::Pair::from_string(suri.as_str(), None)?;
+
+    let (sender, receiver) = mpsc::unbounded();
+    let hashes = receiver.then(move |_| {
+        datalog::submit_erase(pair.clone(), remote.clone()).map(|r| r.map_err(Into::into))
+    });
+    Ok((sender.sink_err_into(), hashes))
+}
+
 /// Upload some data into IPFS network.
 ///
 /// Returns IPFS hash of consumed data objects.
@@ -101,6 +119,7 @@ pub fn ipfs<T>() -> Result<(
 where
     T: AsRef<[u8]> + Send + Sync + 'static,
 {
+//    let mut runtime = actix_rt::System::new("ipfs-api");
     let (sender, receiver) = mpsc::unbounded();
     let hashes = receiver.then(move |msg: T| async move {
         let client = IpfsClient::default();
