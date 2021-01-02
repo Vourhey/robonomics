@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["robonomics_runtime"] = [{"text":"impl OnUnbalanced&lt;&lt;Module&lt;Runtime, DefaultInstance&gt; as Currency&lt;&lt;&lt;MultiSignature as Verify&gt;::Signer as IdentifyAccount&gt;::AccountId&gt;&gt;::NegativeImbalance&gt; for Author","synthetic":false,"types":[]},{"text":"impl OnUnbalanced&lt;&lt;Module&lt;Runtime, DefaultInstance&gt; as Currency&lt;&lt;&lt;MultiSignature as Verify&gt;::Signer as IdentifyAccount&gt;::AccountId&gt;&gt;::NegativeImbalance&gt; for DealWithFees","synthetic":false,"types":[]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -492,7 +492,6 @@
 <span id="491">491</span>
 <span id="492">492</span>
 <span id="493">493</span>
-<span id="494">494</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -532,26 +531,30 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">technics</span>;
 
 <span class="doccomment">/// Type synonym for technical trait parameter.</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">TechnicalParam</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Technics</span> <span class="kw">as</span> <span class="ident">Technical</span><span class="op">&gt;</span>::<span class="ident">Parameter</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">TechnicalParam</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Technics</span> <span class="kw">as</span> <span class="ident">Technical</span><span class="op">&gt;</span>::<span class="ident">Parameter</span>;
 
 <span class="doccomment">/// Type synonym for technical report trait parameter.</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">TechnicalReport</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Technics</span> <span class="kw">as</span> <span class="ident">Technical</span><span class="op">&gt;</span>::<span class="ident">Report</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">TechnicalReport</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Technics</span> <span class="kw">as</span> <span class="ident">Technical</span><span class="op">&gt;</span>::<span class="ident">Report</span>;
 
 <span class="doccomment">/// Type synonym for economical trait parameter.</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">EconomicalParam</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Economics</span> <span class="kw">as</span> <span class="ident">Economical</span><span class="op">&gt;</span>::<span class="ident">Parameter</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">EconomicalParam</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Economics</span> <span class="kw">as</span> <span class="ident">Economical</span><span class="op">&gt;</span>::<span class="ident">Parameter</span>;
 
 <span class="doccomment">/// Type synonym for liability proof parameter.</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ProofParam</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span>
-    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Liability</span> <span class="kw">as</span> <span class="ident">Agreement</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Technics</span>, <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Economics</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">Proof</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ProofParam</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Liability</span> <span class="kw">as</span> <span class="ident">Agreement</span><span class="op">&lt;</span>
+    <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Technics</span>,
+    <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Economics</span>,
+<span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">Proof</span>;
 
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">LiabilityIndex</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span>
-    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Liability</span> <span class="kw">as</span> <span class="ident">Agreement</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Technics</span>, <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Economics</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">Index</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">LiabilityIndex</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Liability</span> <span class="kw">as</span> <span class="ident">Agreement</span><span class="op">&lt;</span>
+    <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Technics</span>,
+    <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Economics</span>,
+<span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">Index</span>;
 
 <span class="doccomment">/// Current runtime account identificator.</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">AccountId</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">AccountId</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">AccountId</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">AccountId</span>;
 
 <span class="doccomment">/// Liability module main trait.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Trait</span>: <span class="ident">frame_system</span>::<span class="ident">Trait</span> {
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Config</span>: <span class="ident">frame_system</span>::<span class="ident">Config</span> {
     <span class="doccomment">/// Technical aspects of agreement.</span>
     <span class="kw">type</span> <span class="ident">Technics</span>: <span class="ident">Technical</span>;
 
@@ -564,7 +567,7 @@
         <span class="op">+</span> <span class="ident">Agreement</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Technics</span>, <span class="self">Self</span>::<span class="ident">Economics</span>, <span class="ident">AccountId</span> <span class="op">=</span> <span class="ident">AccountId</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// The overarching event type.</span>
-    <span class="kw">type</span> <span class="ident">Event</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Event</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Event</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Event</span><span class="op">&gt;</span>;
 }
 
 <span class="macro">decl_event</span><span class="macro">!</span> {
@@ -584,7 +587,7 @@
 }
 
 <span class="macro">decl_error</span><span class="macro">!</span> {
-    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> <span class="kw">for</span> <span class="ident">Module</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Trait</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> <span class="kw">for</span> <span class="ident">Module</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> {
         <span class="doccomment">/// Promisor agreement proof verification failed</span>
         <span class="ident">BadPromisorProof</span>,
         <span class="doccomment">/// Promisee agreement proof verification failed</span>
@@ -597,7 +600,7 @@
 }
 
 <span class="macro">decl_storage</span><span class="macro">!</span> {
-    <span class="kw">trait</span> <span class="ident">Store</span> <span class="kw">for</span> <span class="ident">Module</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Trait</span><span class="op">&gt;</span> <span class="kw">as</span> <span class="ident">Liability</span> {
+    <span class="kw">trait</span> <span class="ident">Store</span> <span class="kw">for</span> <span class="ident">Module</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="kw">as</span> <span class="ident">Liability</span> {
         <span class="doccomment">/// Latest liability index.</span>
         <span class="ident">LatestIndex</span> <span class="ident">get</span>(<span class="kw">fn</span> <span class="ident">latest_index</span>): <span class="ident">LiabilityIndex</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
         <span class="doccomment">/// SCALE-encoded liability parameters.</span>
@@ -613,7 +616,7 @@
 }
 
 <span class="macro">decl_module</span><span class="macro">!</span> {
-    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Module</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Trait</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw">enum</span> <span class="ident">Call</span> <span class="kw">where</span> <span class="ident">origin</span>: <span class="ident">T</span>::<span class="ident">Origin</span> {
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Module</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw">enum</span> <span class="ident">Call</span> <span class="kw">where</span> <span class="ident">origin</span>: <span class="ident">T</span>::<span class="ident">Origin</span> {
         <span class="kw">fn</span> <span class="ident">deposit_event</span>() <span class="op">=</span> <span class="ident">default</span>;
 
         <span class="doccomment">/// Create agreement between two parties.</span>
@@ -706,7 +709,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Trait</span><span class="op">&gt;</span> <span class="ident">frame_support</span>::<span class="ident">unsigned</span>::<span class="ident">ValidateUnsigned</span> <span class="kw">for</span> <span class="ident">Module</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">frame_support</span>::<span class="ident">unsigned</span>::<span class="ident">ValidateUnsigned</span> <span class="kw">for</span> <span class="ident">Module</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Call</span> <span class="op">=</span> <span class="ident">Call</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">validate_unsigned</span>(<span class="ident">_source</span>: <span class="ident">TransactionSource</span>, <span class="ident">call</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>::<span class="ident">Call</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TransactionValidity</span> {
@@ -777,14 +780,12 @@
     <span class="kw">use</span> <span class="ident">base58</span>::<span class="ident">FromBase58</span>;
     <span class="kw">use</span> <span class="ident">frame_support</span>::{
         <span class="ident">assert_err</span>, <span class="ident">assert_ok</span>, <span class="ident">impl_outer_event</span>, <span class="ident">impl_outer_origin</span>, <span class="ident">parameter_types</span>,
-        <span class="ident">weights</span>::<span class="ident">Weight</span>,
     };
     <span class="kw">use</span> <span class="ident">node_primitives</span>::{<span class="ident">AccountId</span>, <span class="ident">Signature</span>};
     <span class="kw">use</span> <span class="ident">sp_core</span>::{<span class="ident">crypto</span>::<span class="ident">Pair</span>, <span class="ident">sr25519</span>, <span class="ident">H256</span>};
     <span class="kw">use</span> <span class="ident">sp_runtime</span>::{
         <span class="ident">testing</span>::<span class="ident">Header</span>,
         <span class="ident">traits</span>::{<span class="ident">IdentifyAccount</span>, <span class="ident">IdentityLookup</span>, <span class="ident">Verify</span>},
-        <span class="ident">Perbill</span>,
     };
 
     <span class="macro">impl_outer_event</span><span class="macro">!</span> {
@@ -802,12 +803,9 @@
 
     <span class="macro">parameter_types</span><span class="macro">!</span> {
         <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">BlockHashCount</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">250</span>;
-        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MaximumBlockWeight</span>: <span class="ident">Weight</span> <span class="op">=</span> <span class="number">1024</span>;
-        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MaximumBlockLength</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">2</span> <span class="op">*</span> <span class="number">1024</span>;
-        <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">AvailableBlockRatio</span>: <span class="ident">Perbill</span> <span class="op">=</span> <span class="ident">Perbill</span>::<span class="ident">one</span>();
     }
 
-    <span class="kw">impl</span> <span class="ident">frame_system</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+    <span class="kw">impl</span> <span class="ident">frame_system</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
         <span class="kw">type</span> <span class="ident">Origin</span> <span class="op">=</span> <span class="ident">Origin</span>;
         <span class="kw">type</span> <span class="ident">Index</span> <span class="op">=</span> <span class="ident">u64</span>;
         <span class="kw">type</span> <span class="ident">BlockNumber</span> <span class="op">=</span> <span class="ident">u64</span>;
@@ -819,23 +817,19 @@
         <span class="kw">type</span> <span class="ident">Header</span> <span class="op">=</span> <span class="ident">Header</span>;
         <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">MetaEvent</span>;
         <span class="kw">type</span> <span class="ident">BlockHashCount</span> <span class="op">=</span> <span class="ident">BlockHashCount</span>;
-        <span class="kw">type</span> <span class="ident">MaximumBlockWeight</span> <span class="op">=</span> <span class="ident">MaximumBlockWeight</span>;
-        <span class="kw">type</span> <span class="ident">MaximumBlockLength</span> <span class="op">=</span> <span class="ident">MaximumBlockLength</span>;
-        <span class="kw">type</span> <span class="ident">AvailableBlockRatio</span> <span class="op">=</span> <span class="ident">AvailableBlockRatio</span>;
         <span class="kw">type</span> <span class="ident">Version</span> <span class="op">=</span> ();
-        <span class="kw">type</span> <span class="ident">ModuleToIndex</span> <span class="op">=</span> ();
+        <span class="kw">type</span> <span class="ident">PalletInfo</span> <span class="op">=</span> ();
         <span class="kw">type</span> <span class="ident">AccountData</span> <span class="op">=</span> ();
         <span class="kw">type</span> <span class="ident">OnNewAccount</span> <span class="op">=</span> ();
         <span class="kw">type</span> <span class="ident">OnKilledAccount</span> <span class="op">=</span> ();
         <span class="kw">type</span> <span class="ident">DbWeight</span> <span class="op">=</span> ();
-        <span class="kw">type</span> <span class="ident">BlockExecutionWeight</span> <span class="op">=</span> ();
-        <span class="kw">type</span> <span class="ident">ExtrinsicBaseWeight</span> <span class="op">=</span> ();
-        <span class="kw">type</span> <span class="ident">MaximumExtrinsicWeight</span> <span class="op">=</span> ();
         <span class="kw">type</span> <span class="ident">BaseCallFilter</span> <span class="op">=</span> ();
         <span class="kw">type</span> <span class="ident">SystemWeightInfo</span> <span class="op">=</span> ();
+        <span class="kw">type</span> <span class="ident">BlockWeights</span> <span class="op">=</span> ();
+        <span class="kw">type</span> <span class="ident">BlockLength</span> <span class="op">=</span> ();
     }
 
-    <span class="kw">impl</span> <span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+    <span class="kw">impl</span> <span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
         <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">MetaEvent</span>;
         <span class="kw">type</span> <span class="ident">Technics</span> <span class="op">=</span> <span class="ident">PureIPFS</span>;
         <span class="kw">type</span> <span class="ident">Economics</span> <span class="op">=</span> <span class="ident">Communism</span>;
@@ -872,8 +866,8 @@
         <span class="kw">let</span> <span class="ident">pair</span> <span class="op">=</span> <span class="ident">sr25519</span>::<span class="ident">Pair</span>::<span class="ident">from_string</span>(<span class="ident">uri</span>, <span class="prelude-val">None</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">sender</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">Signature</span> <span class="kw">as</span> <span class="ident">Verify</span><span class="op">&gt;</span>::<span class="ident">Signer</span>::<span class="ident">from</span>(<span class="ident">pair</span>.<span class="ident">public</span>()).<span class="ident">into_account</span>();
         <span class="kw">let</span> <span class="ident">signature</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">ProofSigner</span><span class="op">&lt;</span><span class="ident">sr25519</span>::<span class="ident">Pair</span><span class="op">&gt;</span> <span class="kw">as</span> <span class="ident">ProofBuilder</span><span class="op">&lt;</span>
-            <span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Technics</span>,
-            <span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Economics</span>,
+            <span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Technics</span>,
+            <span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Economics</span>,
             <span class="ident">LiabilityIndex</span><span class="op">&lt;</span><span class="ident">Runtime</span><span class="op">&gt;</span>,
             <span class="kw">_</span>,
             <span class="kw">_</span>,
@@ -889,8 +883,8 @@
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProofParam</span><span class="op">&lt;</span><span class="ident">Runtime</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">pair</span> <span class="op">=</span> <span class="ident">sr25519</span>::<span class="ident">Pair</span>::<span class="ident">from_string</span>(<span class="ident">uri</span>, <span class="prelude-val">None</span>).<span class="ident">unwrap</span>();
         <span class="op">&lt;</span><span class="ident">ProofSigner</span><span class="op">&lt;</span><span class="ident">sr25519</span>::<span class="ident">Pair</span><span class="op">&gt;</span> <span class="kw">as</span> <span class="ident">ProofBuilder</span><span class="op">&lt;</span>
-            <span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Technics</span>,
-            <span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Economics</span>,
+            <span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Technics</span>,
+            <span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Economics</span>,
             <span class="ident">LiabilityIndex</span><span class="op">&lt;</span><span class="ident">Runtime</span><span class="op">&gt;</span>,
             <span class="kw">_</span>,
             <span class="kw">_</span>,
@@ -905,8 +899,12 @@
             .<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">economics</span> <span class="op">=</span> ();
         <span class="kw">let</span> (<span class="ident">sender</span>, <span class="ident">params_proof</span>) <span class="op">=</span> <span class="ident">get_params_proof</span>(<span class="string">&quot;//Alice&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">technics</span>, <span class="kw-2">&amp;</span><span class="ident">economics</span>);
-        <span class="kw">let</span> <span class="ident">liability</span> <span class="op">=</span>
-            <span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">Liability</span>::<span class="ident">new</span>(<span class="ident">technics</span>, <span class="ident">economics</span>, <span class="ident">sender</span>.<span class="ident">clone</span>(), <span class="ident">sender</span>.<span class="ident">clone</span>());
+        <span class="kw">let</span> <span class="ident">liability</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Liability</span>::<span class="ident">new</span>(
+            <span class="ident">technics</span>,
+            <span class="ident">economics</span>,
+            <span class="ident">sender</span>.<span class="ident">clone</span>(),
+            <span class="ident">sender</span>.<span class="ident">clone</span>(),
+        );
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">liability</span>.<span class="ident">check_params</span>(<span class="kw-2">&amp;</span><span class="ident">params_proof</span>, <span class="kw-2">&amp;</span><span class="ident">sender</span>), <span class="bool-val">true</span>);
 
         <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="number">1</span>;

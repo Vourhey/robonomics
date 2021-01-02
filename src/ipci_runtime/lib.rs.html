@@ -806,6 +806,20 @@
 <span id="805">805</span>
 <span id="806">806</span>
 <span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -834,7 +848,6 @@
 <span class="macro">include</span><span class="macro">!</span>(<span class="macro">concat</span><span class="macro">!</span>(<span class="macro">env</span><span class="macro">!</span>(<span class="string">&quot;OUT_DIR&quot;</span>), <span class="string">&quot;/wasm_binary.rs&quot;</span>));
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">constants</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">impls</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pallet_balances</span>::<span class="ident">Call</span> <span class="kw">as</span> <span class="ident">BalancesCall</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pallet_staking</span>::<span class="ident">StakerStatus</span>;
@@ -842,12 +855,14 @@
 <span class="kw">use</span> <span class="ident">codec</span>::<span class="ident">Encode</span>;
 <span class="kw">use</span> <span class="ident">frame_support</span>::{
     <span class="ident">construct_runtime</span>, <span class="ident">debug</span>, <span class="ident">parameter_types</span>,
-    <span class="ident">traits</span>::{<span class="ident">KeyOwnerProofSystem</span>, <span class="ident">Randomness</span>},
+    <span class="ident">traits</span>::{<span class="ident">KeyOwnerProofSystem</span>, <span class="ident">Randomness</span>, <span class="ident">U128CurrencyToVote</span>},
     <span class="ident">weights</span>::{
         <span class="ident">constants</span>::{<span class="ident">BlockExecutionWeight</span>, <span class="ident">ExtrinsicBaseWeight</span>, <span class="ident">RocksDbWeight</span>, <span class="ident">WEIGHT_PER_SECOND</span>},
-        <span class="ident">Weight</span>, <span class="ident">WeightToFeeCoefficient</span>, <span class="ident">WeightToFeeCoefficients</span>, <span class="ident">WeightToFeePolynomial</span>,
+        <span class="ident">DispatchClass</span>, <span class="ident">Weight</span>, <span class="ident">WeightToFeeCoefficient</span>, <span class="ident">WeightToFeeCoefficients</span>,
+        <span class="ident">WeightToFeePolynomial</span>,
     },
 };
+<span class="kw">use</span> <span class="ident">frame_system</span>::<span class="ident">limits</span>::{<span class="ident">BlockLength</span>, <span class="ident">BlockWeights</span>};
 <span class="kw">use</span> <span class="ident">node_primitives</span>::{
     <span class="ident">AccountId</span>, <span class="ident">AccountIndex</span>, <span class="ident">Balance</span>, <span class="ident">BlockNumber</span>, <span class="ident">Hash</span>, <span class="ident">Index</span>, <span class="ident">Moment</span>, <span class="ident">Signature</span>,
 };
@@ -856,7 +871,7 @@
 };
 <span class="kw">use</span> <span class="ident">pallet_im_online</span>::<span class="ident">sr25519</span>::<span class="ident">AuthorityId</span> <span class="kw">as</span> <span class="ident">ImOnlineId</span>;
 <span class="kw">use</span> <span class="ident">pallet_session</span>::<span class="ident">historical</span> <span class="kw">as</span> <span class="ident">pallet_session_historical</span>;
-<span class="kw">use</span> <span class="ident">pallet_transaction_payment</span>::{<span class="ident">Multiplier</span>, <span class="ident">TargetedFeeAdjustment</span>};
+<span class="kw">use</span> <span class="ident">pallet_transaction_payment</span>::{<span class="ident">CurrencyAdapter</span>, <span class="ident">Multiplier</span>, <span class="ident">TargetedFeeAdjustment</span>};
 <span class="kw">use</span> <span class="ident">pallet_transaction_payment_rpc_runtime_api</span>::<span class="ident">RuntimeDispatchInfo</span>;
 <span class="kw">use</span> <span class="ident">sp_api</span>::<span class="ident">impl_runtime_apis</span>;
 <span class="kw">use</span> <span class="ident">sp_authority_discovery</span>::<span class="ident">AuthorityId</span> <span class="kw">as</span> <span class="ident">AuthorityDiscoveryId</span>;
@@ -864,8 +879,7 @@
 <span class="kw">use</span> <span class="ident">sp_inherents</span>::{<span class="ident">CheckInherentsResult</span>, <span class="ident">InherentData</span>};
 <span class="kw">use</span> <span class="ident">sp_runtime</span>::<span class="ident">curve</span>::<span class="ident">PiecewiseLinear</span>;
 <span class="kw">use</span> <span class="ident">sp_runtime</span>::<span class="ident">traits</span>::{
-    <span class="self">self</span>, <span class="ident">BlakeTwo256</span>, <span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span>, <span class="ident">NumberFor</span>, <span class="ident">OpaqueKeys</span>, <span class="ident">SaturatedConversion</span>, <span class="ident">Saturating</span>,
-    <span class="ident">StaticLookup</span>,
+    <span class="self">self</span>, <span class="ident">BlakeTwo256</span>, <span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span>, <span class="ident">NumberFor</span>, <span class="ident">OpaqueKeys</span>, <span class="ident">SaturatedConversion</span>, <span class="ident">StaticLookup</span>,
 };
 <span class="kw">use</span> <span class="ident">sp_runtime</span>::<span class="ident">transaction_validity</span>::{
     <span class="ident">TransactionPriority</span>, <span class="ident">TransactionSource</span>, <span class="ident">TransactionValidity</span>,
@@ -890,8 +904,8 @@
     <span class="comment">// and set impl_version to equal spec_version. If only runtime</span>
     <span class="comment">// implementation changes and behavior does not, then leave spec_version as</span>
     <span class="comment">// is and increment impl_version.</span>
-    <span class="ident">spec_version</span>: <span class="number">15</span>,
-    <span class="ident">impl_version</span>: <span class="number">15</span>,
+    <span class="ident">spec_version</span>: <span class="number">18</span>,
+    <span class="ident">impl_version</span>: <span class="number">18</span>,
     <span class="ident">apis</span>: <span class="ident">RUNTIME_API_VERSIONS</span>,
     <span class="ident">transaction_version</span>: <span class="number">2</span>,
 };
@@ -905,23 +919,45 @@
     }
 }
 
-<span class="kw">const</span> <span class="ident">AVERAGE_ON_INITIALIZE_WEIGHT</span>: <span class="ident">Perbill</span> <span class="op">=</span> <span class="ident">Perbill</span>::<span class="ident">from_percent</span>(<span class="number">10</span>);
+<span class="doccomment">/// We assume that ~10% of the block weight is consumed by `on_initalize` handlers.</span>
+<span class="doccomment">/// This is used to limit the maximal weight of a single extrinsic.</span>
+<span class="kw">const</span> <span class="ident">AVERAGE_ON_INITIALIZE_RATIO</span>: <span class="ident">Perbill</span> <span class="op">=</span> <span class="ident">Perbill</span>::<span class="ident">from_percent</span>(<span class="number">10</span>);
+<span class="doccomment">/// We allow `Normal` extrinsics to fill up the block up to 75%, the rest can be used</span>
+<span class="doccomment">/// by  Operational  extrinsics.</span>
+<span class="kw">const</span> <span class="ident">NORMAL_DISPATCH_RATIO</span>: <span class="ident">Perbill</span> <span class="op">=</span> <span class="ident">Perbill</span>::<span class="ident">from_percent</span>(<span class="number">75</span>);
+<span class="doccomment">/// We allow for 2 seconds of compute with a 6 second average block time.</span>
+<span class="kw">const</span> <span class="ident">MAXIMUM_BLOCK_WEIGHT</span>: <span class="ident">Weight</span> <span class="op">=</span> <span class="number">2</span> <span class="op">*</span> <span class="ident">WEIGHT_PER_SECOND</span>;
+
 <span class="macro">parameter_types</span><span class="macro">!</span> {
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">BlockHashCount</span>: <span class="ident">BlockNumber</span> <span class="op">=</span> <span class="number">2400</span>;
-    <span class="doccomment">/// We allow for 2 seconds of compute with a 6 second average block time.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MaximumBlockWeight</span>: <span class="ident">Weight</span> <span class="op">=</span> <span class="number">2</span> <span class="op">*</span> <span class="ident">WEIGHT_PER_SECOND</span>;
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">AvailableBlockRatio</span>: <span class="ident">Perbill</span> <span class="op">=</span> <span class="ident">Perbill</span>::<span class="ident">from_percent</span>(<span class="number">75</span>);
-    <span class="doccomment">/// Assume 10% of weight for average on_initialize calls</span>
-    <span class="kw">pub</span> <span class="ident">MaximumExtrinsicWeight</span>: <span class="ident">Weight</span> <span class="op">=</span>
-        <span class="ident">AvailableBlockRatio</span>::<span class="ident">get</span>().<span class="ident">saturating_sub</span>(<span class="ident">AVERAGE_ON_INITIALIZE_WEIGHT</span>)
-        <span class="op">*</span> <span class="ident">MaximumBlockWeight</span>::<span class="ident">get</span>();
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MaximumBlockLength</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">5</span> <span class="op">*</span> <span class="number">1024</span> <span class="op">*</span> <span class="number">1024</span>;
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">BlockHashCount</span>: <span class="ident">BlockNumber</span> <span class="op">=</span> <span class="number">250</span>;
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">Version</span>: <span class="ident">RuntimeVersion</span> <span class="op">=</span> <span class="ident">VERSION</span>;
+    <span class="kw">pub</span> <span class="ident">RuntimeBlockLength</span>: <span class="ident">BlockLength</span> <span class="op">=</span>
+        <span class="ident">BlockLength</span>::<span class="ident">max_with_normal_ratio</span>(<span class="number">5</span> <span class="op">*</span> <span class="number">1024</span> <span class="op">*</span> <span class="number">1024</span>, <span class="ident">NORMAL_DISPATCH_RATIO</span>);
+    <span class="kw">pub</span> <span class="ident">RuntimeBlockWeights</span>: <span class="ident">BlockWeights</span> <span class="op">=</span> <span class="ident">BlockWeights</span>::<span class="ident">builder</span>()
+        .<span class="ident">base_block</span>(<span class="ident">BlockExecutionWeight</span>::<span class="ident">get</span>())
+        .<span class="ident">for_class</span>(<span class="ident">DispatchClass</span>::<span class="ident">all</span>(), <span class="op">|</span><span class="ident">weights</span><span class="op">|</span> {
+            <span class="ident">weights</span>.<span class="ident">base_extrinsic</span> <span class="op">=</span> <span class="ident">ExtrinsicBaseWeight</span>::<span class="ident">get</span>();
+        })
+        .<span class="ident">for_class</span>(<span class="ident">DispatchClass</span>::<span class="ident">Normal</span>, <span class="op">|</span><span class="ident">weights</span><span class="op">|</span> {
+            <span class="ident">weights</span>.<span class="ident">max_total</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">NORMAL_DISPATCH_RATIO</span> <span class="op">*</span> <span class="ident">MAXIMUM_BLOCK_WEIGHT</span>);
+        })
+        .<span class="ident">for_class</span>(<span class="ident">DispatchClass</span>::<span class="ident">Operational</span>, <span class="op">|</span><span class="ident">weights</span><span class="op">|</span> {
+            <span class="ident">weights</span>.<span class="ident">max_total</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">MAXIMUM_BLOCK_WEIGHT</span>);
+            <span class="comment">// Operational transactions have some extra reserved space, so that they</span>
+            <span class="comment">// are included even if block reached `MAXIMUM_BLOCK_WEIGHT`.</span>
+            <span class="ident">weights</span>.<span class="ident">reserved</span> <span class="op">=</span> <span class="prelude-val">Some</span>(
+                <span class="ident">MAXIMUM_BLOCK_WEIGHT</span> <span class="op">-</span> <span class="ident">NORMAL_DISPATCH_RATIO</span> <span class="op">*</span> <span class="ident">MAXIMUM_BLOCK_WEIGHT</span>
+            );
+        })
+        .<span class="ident">avg_block_initialization</span>(<span class="ident">AVERAGE_ON_INITIALIZE_RATIO</span>)
+        .<span class="ident">build_or_panic</span>();
 }
 
-<span class="kw">impl</span> <span class="ident">frame_system</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">frame_system</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Call</span> <span class="op">=</span> <span class="ident">Call</span>;
     <span class="kw">type</span> <span class="ident">BaseCallFilter</span> <span class="op">=</span> ();
+    <span class="kw">type</span> <span class="ident">BlockWeights</span> <span class="op">=</span> <span class="ident">RuntimeBlockWeights</span>;
+    <span class="kw">type</span> <span class="ident">BlockLength</span> <span class="op">=</span> <span class="ident">RuntimeBlockLength</span>;
     <span class="kw">type</span> <span class="ident">Version</span> <span class="op">=</span> <span class="ident">Version</span>;
     <span class="kw">type</span> <span class="ident">AccountId</span> <span class="op">=</span> <span class="ident">AccountId</span>;
     <span class="kw">type</span> <span class="ident">Lookup</span> <span class="op">=</span> <span class="ident">Indices</span>;
@@ -933,21 +969,15 @@
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
     <span class="kw">type</span> <span class="ident">Origin</span> <span class="op">=</span> <span class="ident">Origin</span>;
     <span class="kw">type</span> <span class="ident">DbWeight</span> <span class="op">=</span> <span class="ident">RocksDbWeight</span>;
-    <span class="kw">type</span> <span class="ident">BlockExecutionWeight</span> <span class="op">=</span> <span class="ident">BlockExecutionWeight</span>;
-    <span class="kw">type</span> <span class="ident">ExtrinsicBaseWeight</span> <span class="op">=</span> <span class="ident">ExtrinsicBaseWeight</span>;
     <span class="kw">type</span> <span class="ident">BlockHashCount</span> <span class="op">=</span> <span class="ident">BlockHashCount</span>;
-    <span class="kw">type</span> <span class="ident">MaximumExtrinsicWeight</span> <span class="op">=</span> <span class="ident">MaximumExtrinsicWeight</span>;
-    <span class="kw">type</span> <span class="ident">MaximumBlockWeight</span> <span class="op">=</span> <span class="ident">MaximumBlockWeight</span>;
-    <span class="kw">type</span> <span class="ident">MaximumBlockLength</span> <span class="op">=</span> <span class="ident">MaximumBlockLength</span>;
-    <span class="kw">type</span> <span class="ident">AvailableBlockRatio</span> <span class="op">=</span> <span class="ident">AvailableBlockRatio</span>;
-    <span class="kw">type</span> <span class="ident">ModuleToIndex</span> <span class="op">=</span> <span class="ident">ModuleToIndex</span>;
+    <span class="kw">type</span> <span class="ident">PalletInfo</span> <span class="op">=</span> <span class="ident">PalletInfo</span>;
     <span class="kw">type</span> <span class="ident">AccountData</span> <span class="op">=</span> <span class="ident">pallet_balances</span>::<span class="ident">AccountData</span><span class="op">&lt;</span><span class="ident">Balance</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">OnNewAccount</span> <span class="op">=</span> ();
     <span class="kw">type</span> <span class="ident">OnKilledAccount</span> <span class="op">=</span> ();
     <span class="kw">type</span> <span class="ident">SystemWeightInfo</span> <span class="op">=</span> ();
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_utility</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_utility</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Call</span> <span class="op">=</span> <span class="ident">Call</span>;
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
     <span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> ();
@@ -961,7 +991,7 @@
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MaxSignatories</span>: <span class="ident">u16</span> <span class="op">=</span> <span class="number">100</span>;
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_multisig</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_multisig</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
     <span class="kw">type</span> <span class="ident">Call</span> <span class="op">=</span> <span class="ident">Call</span>;
     <span class="kw">type</span> <span class="ident">Currency</span> <span class="op">=</span> <span class="ident">Balances</span>;
@@ -975,7 +1005,7 @@
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MinimumPeriod</span>: <span class="ident">Moment</span> <span class="op">=</span> <span class="ident">SLOT_DURATION</span> <span class="op">/</span> <span class="number">2</span>;
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_timestamp</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_timestamp</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Moment</span> <span class="op">=</span> <span class="ident">Moment</span>;
     <span class="kw">type</span> <span class="ident">OnTimestampSet</span> <span class="op">=</span> <span class="ident">Babe</span>;
     <span class="kw">type</span> <span class="ident">MinimumPeriod</span> <span class="op">=</span> <span class="ident">MinimumPeriod</span>;
@@ -991,27 +1021,25 @@
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ExpectedBlockTime</span>: <span class="ident">Moment</span> <span class="op">=</span> <span class="ident">MILLISECS_PER_BLOCK</span>;
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_babe</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_babe</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">EpochDuration</span> <span class="op">=</span> <span class="ident">EpochDuration</span>;
     <span class="kw">type</span> <span class="ident">ExpectedBlockTime</span> <span class="op">=</span> <span class="ident">ExpectedBlockTime</span>;
     <span class="kw">type</span> <span class="ident">EpochChangeTrigger</span> <span class="op">=</span> <span class="ident">pallet_babe</span>::<span class="ident">ExternalTrigger</span>;
     <span class="kw">type</span> <span class="ident">KeyOwnerProofSystem</span> <span class="op">=</span> <span class="ident">Historical</span>;
-
     <span class="kw">type</span> <span class="ident">KeyOwnerProof</span> <span class="op">=</span> <span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">KeyOwnerProofSystem</span> <span class="kw">as</span> <span class="ident">KeyOwnerProofSystem</span><span class="op">&lt;</span>(
         <span class="ident">KeyTypeId</span>,
         <span class="ident">pallet_babe</span>::<span class="ident">AuthorityId</span>,
     )<span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">Proof</span>;
-
     <span class="kw">type</span> <span class="ident">KeyOwnerIdentification</span> <span class="op">=</span> <span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">KeyOwnerProofSystem</span> <span class="kw">as</span> <span class="ident">KeyOwnerProofSystem</span><span class="op">&lt;</span>(
         <span class="ident">KeyTypeId</span>,
         <span class="ident">pallet_babe</span>::<span class="ident">AuthorityId</span>,
     )<span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">IdentificationTuple</span>;
-
     <span class="kw">type</span> <span class="ident">HandleEquivocation</span> <span class="op">=</span>
         <span class="ident">pallet_babe</span>::<span class="ident">EquivocationHandler</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">KeyOwnerIdentification</span>, <span class="ident">Offences</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> ();
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_authorship</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_authorship</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">FindAuthor</span> <span class="op">=</span> <span class="ident">pallet_session</span>::<span class="ident">FindAccountFromAuthorIndex</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Babe</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">UncleGenerations</span> <span class="op">=</span> <span class="ident">UncleGenerations</span>;
     <span class="kw">type</span> <span class="ident">FilterUncle</span> <span class="op">=</span> ();
@@ -1022,7 +1050,7 @@
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">IndexDeposit</span>: <span class="ident">Balance</span> <span class="op">=</span> <span class="number">1</span> <span class="op">*</span> <span class="ident">U_MITO</span>;
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_indices</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_indices</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">AccountIndex</span> <span class="op">=</span> <span class="ident">AccountIndex</span>;
     <span class="kw">type</span> <span class="ident">Currency</span> <span class="op">=</span> <span class="ident">Balances</span>;
     <span class="kw">type</span> <span class="ident">Deposit</span> <span class="op">=</span> <span class="ident">IndexDeposit</span>;
@@ -1032,11 +1060,13 @@
 
 <span class="macro">parameter_types</span><span class="macro">!</span> {
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ExistentialDeposit</span>: <span class="ident">Balance</span> <span class="op">=</span> <span class="number">50_000</span> <span class="op">*</span> <span class="ident">U_MITO</span>; <span class="comment">// No less that base transaction fee</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MaxLocks</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">32</span>;
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_balances</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_balances</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
     <span class="kw">type</span> <span class="ident">Balance</span> <span class="op">=</span> <span class="ident">Balance</span>;
+    <span class="kw">type</span> <span class="ident">MaxLocks</span> <span class="op">=</span> <span class="ident">MaxLocks</span>;
     <span class="kw">type</span> <span class="ident">DustRemoval</span> <span class="op">=</span> ();
     <span class="kw">type</span> <span class="ident">ExistentialDeposit</span> <span class="op">=</span> <span class="ident">ExistentialDeposit</span>;
     <span class="kw">type</span> <span class="ident">AccountStore</span> <span class="op">=</span> <span class="ident">frame_system</span>::<span class="ident">Module</span><span class="op">&lt;</span><span class="ident">Runtime</span><span class="op">&gt;</span>;
@@ -1065,9 +1095,8 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_transaction_payment</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
-    <span class="kw">type</span> <span class="ident">Currency</span> <span class="op">=</span> <span class="ident">Balances</span>;
-    <span class="kw">type</span> <span class="ident">OnTransactionPayment</span> <span class="op">=</span> ();
+<span class="kw">impl</span> <span class="ident">pallet_transaction_payment</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+    <span class="kw">type</span> <span class="ident">OnChargeTransaction</span> <span class="op">=</span> <span class="ident">CurrencyAdapter</span><span class="op">&lt;</span><span class="ident">Balances</span>, ()<span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">TransactionByteFee</span> <span class="op">=</span> <span class="ident">TransactionByteFee</span>;
     <span class="kw">type</span> <span class="ident">WeightToFee</span> <span class="op">=</span> <span class="ident">WeightToFee</span>;
     <span class="kw">type</span> <span class="ident">FeeMultiplierUpdate</span> <span class="op">=</span>
@@ -1087,20 +1116,20 @@
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">DisabledValidatorsThreshold</span>: <span class="ident">Perbill</span> <span class="op">=</span> <span class="ident">Perbill</span>::<span class="ident">from_percent</span>(<span class="number">17</span>);
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_session</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_session</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">SessionManager</span> <span class="op">=</span> <span class="ident">Staking</span>;
     <span class="kw">type</span> <span class="ident">SessionHandler</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">SessionKeys</span> <span class="kw">as</span> <span class="ident">OpaqueKeys</span><span class="op">&gt;</span>::<span class="ident">KeyTypeIdProviders</span>;
     <span class="kw">type</span> <span class="ident">ShouldEndSession</span> <span class="op">=</span> <span class="ident">Babe</span>;
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
     <span class="kw">type</span> <span class="ident">Keys</span> <span class="op">=</span> <span class="ident">SessionKeys</span>;
-    <span class="kw">type</span> <span class="ident">ValidatorId</span> <span class="op">=</span> <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">AccountId</span>;
+    <span class="kw">type</span> <span class="ident">ValidatorId</span> <span class="op">=</span> <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">AccountId</span>;
     <span class="kw">type</span> <span class="ident">ValidatorIdOf</span> <span class="op">=</span> <span class="ident">pallet_staking</span>::<span class="ident">StashOf</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">DisabledValidatorsThreshold</span> <span class="op">=</span> <span class="ident">DisabledValidatorsThreshold</span>;
     <span class="kw">type</span> <span class="ident">NextSessionRotation</span> <span class="op">=</span> <span class="ident">Babe</span>;
     <span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> ();
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_session</span>::<span class="ident">historical</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_session</span>::<span class="ident">historical</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">FullIdentification</span> <span class="op">=</span> <span class="ident">pallet_staking</span>::<span class="ident">Exposure</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">Balance</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">FullIdentificationOf</span> <span class="op">=</span> <span class="ident">pallet_staking</span>::<span class="ident">ExposureOf</span><span class="op">&lt;</span><span class="ident">Runtime</span><span class="op">&gt;</span>;
 }
@@ -1126,18 +1155,22 @@
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MaxIterations</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">5</span>;
     <span class="comment">// 0.05%. The higher the value, the more strict solution acceptance becomes.</span>
     <span class="kw">pub</span> <span class="ident">MinSolutionScoreBump</span>: <span class="ident">Perbill</span> <span class="op">=</span> <span class="ident">Perbill</span>::<span class="ident">from_rational_approximation</span>(<span class="number">5u32</span>, <span class="number">10_000</span>);
+    <span class="kw">pub</span> <span class="ident">OffchainSolutionWeightLimit</span>: <span class="ident">Weight</span> <span class="op">=</span> <span class="ident">RuntimeBlockWeights</span>::<span class="ident">get</span>()
+        .<span class="ident">get</span>(<span class="ident">DispatchClass</span>::<span class="ident">Normal</span>)
+        .<span class="ident">max_extrinsic</span>.<span class="ident">expect</span>(<span class="string">&quot;Normal extrinsics have a weight limit configured; qed&quot;</span>)
+        .<span class="ident">saturating_sub</span>(<span class="ident">BlockExecutionWeight</span>::<span class="ident">get</span>());
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_staking</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_staking</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Currency</span> <span class="op">=</span> <span class="ident">Balances</span>;
-    <span class="kw">type</span> <span class="ident">CurrencyToVote</span> <span class="op">=</span> <span class="ident">impls</span>::<span class="ident">CurrencyToVoteHandler</span>;
+    <span class="kw">type</span> <span class="ident">CurrencyToVote</span> <span class="op">=</span> <span class="ident">U128CurrencyToVote</span>;
     <span class="kw">type</span> <span class="ident">UnixTime</span> <span class="op">=</span> <span class="ident">Timestamp</span>;
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
     <span class="kw">type</span> <span class="ident">Slash</span> <span class="op">=</span> ();
     <span class="kw">type</span> <span class="ident">Reward</span> <span class="op">=</span> ();
     <span class="kw">type</span> <span class="ident">RewardRemainder</span> <span class="op">=</span> ();
     <span class="kw">type</span> <span class="ident">SlashDeferDuration</span> <span class="op">=</span> <span class="ident">SlashDeferDuration</span>;
-    <span class="kw">type</span> <span class="ident">SlashCancelOrigin</span> <span class="op">=</span> <span class="ident">frame_system</span>::<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">AccountId</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">SlashCancelOrigin</span> <span class="op">=</span> <span class="ident">frame_system</span>::<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">AccountId</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">SessionsPerEra</span> <span class="op">=</span> <span class="ident">SessionsPerEra</span>;
     <span class="kw">type</span> <span class="ident">BondingDuration</span> <span class="op">=</span> <span class="ident">BondingDuration</span>;
     <span class="kw">type</span> <span class="ident">SessionInterface</span> <span class="op">=</span> <span class="self">Self</span>;
@@ -1145,6 +1178,7 @@
     <span class="kw">type</span> <span class="ident">MaxIterations</span> <span class="op">=</span> <span class="ident">MaxIterations</span>;
     <span class="kw">type</span> <span class="ident">MinSolutionScoreBump</span> <span class="op">=</span> <span class="ident">MinSolutionScoreBump</span>;
     <span class="kw">type</span> <span class="ident">MaxNominatorRewardedPerValidator</span> <span class="op">=</span> <span class="ident">MaxNominatorRewardedPerValidator</span>;
+    <span class="kw">type</span> <span class="ident">OffchainSolutionWeightLimit</span> <span class="op">=</span> <span class="ident">OffchainSolutionWeightLimit</span>;
     <span class="kw">type</span> <span class="ident">NextNewSession</span> <span class="op">=</span> <span class="ident">Session</span>;
     <span class="kw">type</span> <span class="ident">ElectionLookahead</span> <span class="op">=</span> <span class="ident">ElectionLookahead</span>;
     <span class="kw">type</span> <span class="ident">Call</span> <span class="op">=</span> <span class="ident">Call</span>;
@@ -1152,35 +1186,26 @@
     <span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> ();
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_authority_discovery</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {}
+<span class="kw">impl</span> <span class="ident">pallet_authority_discovery</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {}
 
-<span class="kw">impl</span> <span class="ident">pallet_grandpa</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_grandpa</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
     <span class="kw">type</span> <span class="ident">Call</span> <span class="op">=</span> <span class="ident">Call</span>;
-
     <span class="kw">type</span> <span class="ident">KeyOwnerProofSystem</span> <span class="op">=</span> <span class="ident">Historical</span>;
-
     <span class="kw">type</span> <span class="ident">KeyOwnerProof</span> <span class="op">=</span>
         <span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">KeyOwnerProofSystem</span> <span class="kw">as</span> <span class="ident">KeyOwnerProofSystem</span><span class="op">&lt;</span>(<span class="ident">KeyTypeId</span>, <span class="ident">GrandpaId</span>)<span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">Proof</span>;
-
     <span class="kw">type</span> <span class="ident">KeyOwnerIdentification</span> <span class="op">=</span> <span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">KeyOwnerProofSystem</span> <span class="kw">as</span> <span class="ident">KeyOwnerProofSystem</span><span class="op">&lt;</span>(
         <span class="ident">KeyTypeId</span>,
         <span class="ident">GrandpaId</span>,
     )<span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">IdentificationTuple</span>;
-
     <span class="kw">type</span> <span class="ident">HandleEquivocation</span> <span class="op">=</span>
         <span class="ident">pallet_grandpa</span>::<span class="ident">EquivocationHandler</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">KeyOwnerIdentification</span>, <span class="ident">Offences</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> ();
 }
 
 <span class="macro">parameter_types</span><span class="macro">!</span> {
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">WindowSize</span>: <span class="ident">BlockNumber</span> <span class="op">=</span> <span class="number">101</span>;
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ReportLatency</span>: <span class="ident">BlockNumber</span> <span class="op">=</span> <span class="number">1000</span>;
-}
-
-<span class="kw">impl</span> <span class="ident">pallet_finality_tracker</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
-    <span class="kw">type</span> <span class="ident">OnFinalizationStalled</span> <span class="op">=</span> <span class="ident">Grandpa</span>;
-    <span class="kw">type</span> <span class="ident">WindowSize</span> <span class="op">=</span> <span class="ident">WindowSize</span>;
-    <span class="kw">type</span> <span class="ident">ReportLatency</span> <span class="op">=</span> <span class="ident">ReportLatency</span>;
 }
 
 <span class="macro">parameter_types</span><span class="macro">!</span> {
@@ -1192,7 +1217,7 @@
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MaxRegistrars</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">20</span>;
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_identity</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_identity</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
     <span class="kw">type</span> <span class="ident">Currency</span> <span class="op">=</span> <span class="ident">Balances</span>;
     <span class="kw">type</span> <span class="ident">BasicDeposit</span> <span class="op">=</span> <span class="ident">BasicDeposit</span>;
@@ -1202,12 +1227,12 @@
     <span class="kw">type</span> <span class="ident">MaxAdditionalFields</span> <span class="op">=</span> <span class="ident">MaxAdditionalFields</span>;
     <span class="kw">type</span> <span class="ident">MaxRegistrars</span> <span class="op">=</span> <span class="ident">MaxRegistrars</span>;
     <span class="kw">type</span> <span class="ident">Slashed</span> <span class="op">=</span> ();
-    <span class="kw">type</span> <span class="ident">ForceOrigin</span> <span class="op">=</span> <span class="ident">frame_system</span>::<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">AccountId</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">RegistrarOrigin</span> <span class="op">=</span> <span class="ident">frame_system</span>::<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Trait</span><span class="op">&gt;</span>::<span class="ident">AccountId</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">ForceOrigin</span> <span class="op">=</span> <span class="ident">frame_system</span>::<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">AccountId</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">RegistrarOrigin</span> <span class="op">=</span> <span class="ident">frame_system</span>::<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">AccountId</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> ();
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_sudo</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_sudo</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
     <span class="kw">type</span> <span class="ident">Call</span> <span class="op">=</span> <span class="ident">Call</span>;
 }
@@ -1219,7 +1244,7 @@
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">StakingUnsignedPriority</span>: <span class="ident">TransactionPriority</span> <span class="op">=</span> <span class="ident">TransactionPriority</span>::<span class="ident">max_value</span>() <span class="op">/</span> <span class="number">2</span>;
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_im_online</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_im_online</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
     <span class="kw">type</span> <span class="ident">AuthorityId</span> <span class="op">=</span> <span class="ident">ImOnlineId</span>;
     <span class="kw">type</span> <span class="ident">ReportUnresponsiveness</span> <span class="op">=</span> <span class="ident">Offences</span>;
@@ -1229,18 +1254,18 @@
 }
 
 <span class="macro">parameter_types</span><span class="macro">!</span> {
-    <span class="kw">pub</span> <span class="ident">OffencesWeightSoftLimit</span>: <span class="ident">Weight</span> <span class="op">=</span> <span class="ident">Perbill</span>::<span class="ident">from_percent</span>(<span class="number">60</span>) <span class="op">*</span> <span class="ident">MaximumBlockWeight</span>::<span class="ident">get</span>();
+    <span class="kw">pub</span> <span class="ident">OffencesWeightSoftLimit</span>: <span class="ident">Weight</span> <span class="op">=</span> <span class="ident">Perbill</span>::<span class="ident">from_percent</span>(<span class="number">60</span>) <span class="op">*</span>
+        <span class="ident">RuntimeBlockWeights</span>::<span class="ident">get</span>().<span class="ident">max_block</span>;
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_offences</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_offences</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
     <span class="kw">type</span> <span class="ident">IdentificationTuple</span> <span class="op">=</span> <span class="ident">pallet_session</span>::<span class="ident">historical</span>::<span class="ident">IdentificationTuple</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">OnOffenceHandler</span> <span class="op">=</span> <span class="ident">Staking</span>;
     <span class="kw">type</span> <span class="ident">WeightSoftLimit</span> <span class="op">=</span> <span class="ident">OffencesWeightSoftLimit</span>;
-    <span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> ();
 }
 
-<span class="kw">impl</span> <span class="ident">pallet_robonomics_datalog</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+<span class="kw">impl</span> <span class="ident">pallet_robonomics_datalog</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
     <span class="kw">type</span> <span class="ident">Time</span> <span class="op">=</span> <span class="ident">Timestamp</span>;
     <span class="kw">type</span> <span class="ident">Record</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
@@ -1332,7 +1357,6 @@
         <span class="ident">Offences</span>: <span class="ident">pallet_offences</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span>},
         <span class="ident">Historical</span>: <span class="ident">pallet_session_historical</span>::{<span class="ident">Module</span>},
         <span class="ident">Babe</span>: <span class="ident">pallet_babe</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Config</span>, <span class="ident">Inherent</span>, <span class="ident">ValidateUnsigned</span>},
-        <span class="ident">FinalityTracker</span>: <span class="ident">pallet_finality_tracker</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Inherent</span>},
         <span class="ident">Grandpa</span>: <span class="ident">pallet_grandpa</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Config</span>, <span class="ident">Event</span>},
         <span class="ident">ImOnline</span>: <span class="ident">pallet_im_online</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">ValidateUnsigned</span>, <span class="ident">Config</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>},
         <span class="ident">AuthorityDiscovery</span>: <span class="ident">pallet_authority_discovery</span>::{<span class="ident">Module</span>, <span class="ident">Call</span>, <span class="ident">Config</span>},
@@ -1495,6 +1519,10 @@
             <span class="ident">Babe</span>::<span class="ident">current_epoch_start</span>()
         }
 
+        <span class="kw">fn</span> <span class="ident">current_epoch</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">sp_consensus_babe</span>::<span class="ident">Epoch</span> {
+            <span class="ident">Babe</span>::<span class="ident">current_epoch</span>()
+        }
+
         <span class="kw">fn</span> <span class="ident">generate_key_ownership_proof</span>(
             <span class="ident">_slot_number</span>: <span class="ident">sp_consensus_babe</span>::<span class="ident">SlotNumber</span>,
             <span class="ident">authority_id</span>: <span class="ident">sp_consensus_babe</span>::<span class="ident">AuthorityId</span>,
@@ -1570,9 +1598,9 @@
             <span class="kw">use</span> <span class="ident">pallet_offences_benchmarking</span>::<span class="ident">Module</span> <span class="kw">as</span> <span class="ident">OffencesBench</span>;
             <span class="kw">use</span> <span class="ident">frame_system_benchmarking</span>::<span class="ident">Module</span> <span class="kw">as</span> <span class="ident">SystemBench</span>;
 
-            <span class="kw">impl</span> <span class="ident">pallet_session_benchmarking</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {}
-            <span class="kw">impl</span> <span class="ident">pallet_offences_benchmarking</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {}
-            <span class="kw">impl</span> <span class="ident">frame_system_benchmarking</span>::<span class="ident">Trait</span> <span class="kw">for</span> <span class="ident">Runtime</span> {}
+            <span class="kw">impl</span> <span class="ident">pallet_session_benchmarking</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {}
+            <span class="kw">impl</span> <span class="ident">pallet_offences_benchmarking</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {}
+            <span class="kw">impl</span> <span class="ident">frame_system_benchmarking</span>::<span class="ident">Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {}
 
             <span class="kw">let</span> <span class="ident">whitelist</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="comment">// Block Number</span>

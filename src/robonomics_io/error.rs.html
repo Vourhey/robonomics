@@ -57,9 +57,6 @@
 <span id="56">56</span>
 <span id="57">57</span>
 <span id="58">58</span>
-<span id="59">59</span>
-<span id="60">60</span>
-<span id="61">61</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -80,7 +77,6 @@
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="doccomment">//! Errors that can occur during the I/O operations.</span>
 
-<span class="kw">use</span> <span class="ident">ipfs_api</span>::<span class="ident">response</span>::<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">IpfsError</span>;
 <span class="kw">use</span> <span class="ident">sp_core</span>::<span class="ident">crypto</span>::<span class="ident">SecretStringError</span>;
 
 <span class="doccomment">/// Sensor Result typedef.</span>
@@ -89,8 +85,8 @@
 <span class="doccomment">/// Robonomics sensors errors.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">derive_more</span>::<span class="ident">Display</span>, <span class="ident">derive_more</span>::<span class="ident">From</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
-    <span class="doccomment">/// Serial port I/O error.</span>
-    <span class="ident">Serial</span>(<span class="ident">serialport</span>::<span class="ident">Error</span>),
+    <span class="doccomment">/// Particle sensor error.</span>
+    <span class="ident">ParticleSensor</span>(<span class="ident">sds011</span>::<span class="ident">Error</span>),
     <span class="doccomment">/// Sync channel send error.</span>
     <span class="ident">ChannelSend</span>(<span class="ident">futures</span>::<span class="ident">channel</span>::<span class="ident">mpsc</span>::<span class="ident">SendError</span>),
     <span class="doccomment">/// Private key loading error.</span>
@@ -98,8 +94,6 @@
     <span class="ident">PrivateKeyFailure</span>(<span class="ident">SecretStringError</span>),
     <span class="doccomment">/// Protocol error.</span>
     <span class="ident">Protocol</span>(<span class="ident">robonomics_protocol</span>::<span class="ident">error</span>::<span class="ident">Error</span>),
-    <span class="doccomment">/// Ipfs client error.</span>
-    <span class="ident">Ipfs</span>(<span class="ident">IpfsError</span>),
     <span class="doccomment">/// Standard I/O error.</span>
     <span class="ident">Io</span>(<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>),
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;ros&quot;</span>)]</span>

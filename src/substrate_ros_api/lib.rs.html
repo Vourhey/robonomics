@@ -90,6 +90,7 @@
 <span id="89">89</span>
 <span id="90">90</span>
 <span id="91">91</span>
+<span id="92">92</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -118,7 +119,8 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">sc_rpc</span>::<span class="ident">system</span>::<span class="ident">helpers</span>::<span class="ident">SystemInfo</span>;
 <span class="kw">use</span> <span class="ident">sp_api</span>::{<span class="ident">CallApiAt</span>, <span class="ident">ProvideRuntimeApi</span>};
 <span class="kw">use</span> <span class="ident">sp_blockchain</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">ClientError</span>, <span class="ident">HeaderBackend</span>};
-<span class="kw">use</span> <span class="ident">sp_core</span>::{<span class="ident">traits</span>::<span class="ident">BareCryptoStorePtr</span>, <span class="ident">H256</span>};
+<span class="kw">use</span> <span class="ident">sp_core</span>::<span class="ident">H256</span>;
+<span class="kw">use</span> <span class="ident">sp_keystore</span>::<span class="ident">SyncCryptoStorePtr</span>;
 <span class="kw">use</span> <span class="ident">sp_runtime</span>::<span class="ident">traits</span>;
 <span class="kw">use</span> <span class="ident">sp_session</span>::<span class="ident">SessionKeys</span>;
 <span class="kw">use</span> <span class="ident">sp_transaction_pool</span>::<span class="ident">TransactionPool</span>;
@@ -134,7 +136,7 @@
     <span class="ident">service_client</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Client</span><span class="op">&gt;</span>,
     <span class="ident">service_network</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">NetworkService</span><span class="op">&lt;</span><span class="ident">P</span>::<span class="ident">Block</span>, <span class="ident">H</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">service_transaction_pool</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>,
-    <span class="ident">service_keystore</span>: <span class="ident">BareCryptoStorePtr</span>,
+    <span class="ident">service_keystore</span>: <span class="ident">SyncCryptoStorePtr</span>,
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">rosrust</span>::<span class="ident">Service</span><span class="op">&gt;</span>, <span class="kw">impl</span> <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> ()<span class="op">&gt;</span>), <span class="ident">Error</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">BE</span>: <span class="ident">Backend</span><span class="op">&lt;</span><span class="ident">P</span>::<span class="ident">Block</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,

@@ -108,6 +108,7 @@
 <span id="107">107</span>
 <span id="108">108</span>
 <span id="109">109</span>
+<span id="110">110</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -131,7 +132,8 @@
 <span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">executor</span>::<span class="ident">block_on</span>;
 <span class="kw">use</span> <span class="ident">sp_api</span>::<span class="ident">ProvideRuntimeApi</span>;
 <span class="kw">use</span> <span class="ident">sp_blockchain</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">ClientError</span>, <span class="ident">HeaderBackend</span>};
-<span class="kw">use</span> <span class="ident">sp_core</span>::{<span class="ident">traits</span>::<span class="ident">BareCryptoStorePtr</span>, <span class="ident">H256</span>};
+<span class="kw">use</span> <span class="ident">sp_core</span>::<span class="ident">H256</span>;
+<span class="kw">use</span> <span class="ident">sp_keystore</span>::<span class="ident">SyncCryptoStorePtr</span>;
 <span class="kw">use</span> <span class="ident">sp_runtime</span>::{<span class="ident">generic</span>, <span class="ident">traits</span>};
 <span class="kw">use</span> <span class="ident">sp_session</span>::<span class="ident">SessionKeys</span>;
 <span class="kw">use</span> <span class="ident">sp_transaction_pool</span>::{
@@ -149,7 +151,7 @@
     <span class="doccomment">/// Transactions pool</span>
     <span class="ident">pool</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>,
     <span class="doccomment">/// The key store.</span>
-    <span class="ident">keystore</span>: <span class="ident">BareCryptoStorePtr</span>,
+    <span class="ident">keystore</span>: <span class="ident">SyncCryptoStorePtr</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">Client</span><span class="op">&gt;</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">Author</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">Client</span><span class="op">&gt;</span> {
@@ -164,7 +166,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">Client</span><span class="op">&gt;</span> <span class="ident">Author</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">Client</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Create new instance of Authoring API.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">client</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Client</span><span class="op">&gt;</span>, <span class="ident">pool</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>, <span class="ident">keystore</span>: <span class="ident">BareCryptoStorePtr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">client</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Client</span><span class="op">&gt;</span>, <span class="ident">pool</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>, <span class="ident">keystore</span>: <span class="ident">SyncCryptoStorePtr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">Author</span> {
             <span class="ident">client</span>,
             <span class="ident">pool</span>,

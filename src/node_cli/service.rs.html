@@ -552,54 +552,6 @@
 <span id="551">551</span>
 <span id="552">552</span>
 <span id="553">553</span>
-<span id="554">554</span>
-<span id="555">555</span>
-<span id="556">556</span>
-<span id="557">557</span>
-<span id="558">558</span>
-<span id="559">559</span>
-<span id="560">560</span>
-<span id="561">561</span>
-<span id="562">562</span>
-<span id="563">563</span>
-<span id="564">564</span>
-<span id="565">565</span>
-<span id="566">566</span>
-<span id="567">567</span>
-<span id="568">568</span>
-<span id="569">569</span>
-<span id="570">570</span>
-<span id="571">571</span>
-<span id="572">572</span>
-<span id="573">573</span>
-<span id="574">574</span>
-<span id="575">575</span>
-<span id="576">576</span>
-<span id="577">577</span>
-<span id="578">578</span>
-<span id="579">579</span>
-<span id="580">580</span>
-<span id="581">581</span>
-<span id="582">582</span>
-<span id="583">583</span>
-<span id="584">584</span>
-<span id="585">585</span>
-<span id="586">586</span>
-<span id="587">587</span>
-<span id="588">588</span>
-<span id="589">589</span>
-<span id="590">590</span>
-<span id="591">591</span>
-<span id="592">592</span>
-<span id="593">593</span>
-<span id="594">594</span>
-<span id="595">595</span>
-<span id="596">596</span>
-<span id="597">597</span>
-<span id="598">598</span>
-<span id="599">599</span>
-<span id="600">600</span>
-<span id="601">601</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -620,19 +572,13 @@
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="doccomment">//! Service and ServiceFactory implementation. Specialized wrapper over Substrate service.</span>
 
-<span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">node_primitives</span>::{<span class="ident">AccountId</span>, <span class="ident">Balance</span>, <span class="ident">Block</span>, <span class="ident">Index</span>};
 <span class="kw">use</span> <span class="ident">sc_client_api</span>::{<span class="ident">ExecutorProvider</span>, <span class="ident">RemoteBackend</span>};
 <span class="kw">use</span> <span class="ident">sc_consensus_babe</span>;
 <span class="kw">use</span> <span class="ident">sc_finality_grandpa</span>::{<span class="self">self</span> <span class="kw">as</span> <span class="ident">grandpa</span>, <span class="ident">FinalityProofProvider</span> <span class="kw">as</span> <span class="ident">GrandpaFinalityProofProvider</span>};
-<span class="kw">use</span> <span class="ident">sc_network</span>::{<span class="ident">Event</span>, <span class="ident">NetworkService</span>};
-<span class="kw">use</span> <span class="ident">sc_service</span>::{
-    <span class="ident">config</span>::{<span class="ident">Configuration</span>, <span class="ident">Role</span>},
-    <span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">ServiceError</span>,
-    <span class="ident">RpcHandlers</span>, <span class="ident">TaskManager</span>,
-};
+<span class="kw">use</span> <span class="ident">sc_network</span>::<span class="ident">NetworkService</span>;
+<span class="kw">use</span> <span class="ident">sc_service</span>::{<span class="ident">config</span>::<span class="ident">Configuration</span>, <span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">ServiceError</span>, <span class="ident">RpcHandlers</span>, <span class="ident">TaskManager</span>};
 <span class="kw">use</span> <span class="ident">sp_api</span>::<span class="ident">ConstructRuntimeApi</span>;
-<span class="kw">use</span> <span class="ident">sp_core</span>::<span class="ident">traits</span>::<span class="ident">BareCryptoStorePtr</span>;
 <span class="kw">use</span> <span class="ident">sp_inherents</span>::<span class="ident">InherentDataProviders</span>;
 <span class="kw">use</span> <span class="ident">sp_runtime</span>::<span class="ident">traits</span>::{<span class="ident">BlakeTwo256</span>, <span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Arc</span>;
@@ -658,7 +604,6 @@
     <span class="op">+</span> <span class="ident">sp_api</span>::<span class="ident">Metadata</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>
     <span class="op">+</span> <span class="ident">sp_offchain</span>::<span class="ident">OffchainWorkerApi</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>
     <span class="op">+</span> <span class="ident">sp_session</span>::<span class="ident">SessionKeys</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>
-    <span class="op">+</span> <span class="ident">sp_authority_discovery</span>::<span class="ident">AuthorityDiscoveryApi</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">sp_api</span>::<span class="ident">ApiExt</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">StateBackend</span>: <span class="ident">sp_api</span>::<span class="ident">StateBackend</span><span class="op">&lt;</span><span class="ident">BlakeTwo256</span><span class="op">&gt;</span>,
 {
@@ -675,8 +620,7 @@
         <span class="op">+</span> <span class="ident">frame_system_rpc_runtime_api</span>::<span class="ident">AccountNonceApi</span><span class="op">&lt;</span><span class="ident">Block</span>, <span class="ident">AccountId</span>, <span class="ident">Index</span><span class="op">&gt;</span>
         <span class="op">+</span> <span class="ident">sp_api</span>::<span class="ident">Metadata</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>
         <span class="op">+</span> <span class="ident">sp_offchain</span>::<span class="ident">OffchainWorkerApi</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>
-        <span class="op">+</span> <span class="ident">sp_session</span>::<span class="ident">SessionKeys</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>
-        <span class="op">+</span> <span class="ident">sp_authority_discovery</span>::<span class="ident">AuthorityDiscoveryApi</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>,
+        <span class="op">+</span> <span class="ident">sp_session</span>::<span class="ident">SessionKeys</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>,
     <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">sp_api</span>::<span class="ident">ApiExt</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">StateBackend</span>: <span class="ident">sp_api</span>::<span class="ident">StateBackend</span><span class="op">&lt;</span><span class="ident">BlakeTwo256</span><span class="op">&gt;</span>,
 {
 }
@@ -691,7 +635,7 @@
         <span class="ident">sp_consensus</span>::<span class="ident">DefaultImportQueue</span><span class="op">&lt;</span><span class="ident">Block</span>, <span class="ident">FullClient</span><span class="op">&lt;</span><span class="ident">Runtime</span>, <span class="ident">Executor</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">sc_transaction_pool</span>::<span class="ident">FullPool</span><span class="op">&lt;</span><span class="ident">Block</span>, <span class="ident">FullClient</span><span class="op">&lt;</span><span class="ident">Runtime</span>, <span class="ident">Executor</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         (
-            <span class="kw">impl</span> <span class="ident">Fn</span>(<span class="ident">node_rpc</span>::<span class="ident">DenyUnsafe</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">node_rpc</span>::<span class="ident">IoHandler</span>,
+            <span class="kw">impl</span> <span class="ident">Fn</span>(<span class="ident">node_rpc</span>::<span class="ident">DenyUnsafe</span>, <span class="ident">sc_rpc</span>::<span class="ident">SubscriptionTaskExecutor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">node_rpc</span>::<span class="ident">IoHandler</span>,
             (
                 <span class="ident">sc_consensus_babe</span>::<span class="ident">BabeBlockImport</span><span class="op">&lt;</span>
                     <span class="ident">Block</span>,
@@ -712,7 +656,7 @@
         <span class="ident">RuntimeApiCollection</span><span class="op">&lt;</span><span class="ident">StateBackend</span> <span class="op">=</span> <span class="ident">sc_client_api</span>::<span class="ident">StateBackendFor</span><span class="op">&lt;</span><span class="ident">FullBackend</span>, <span class="ident">Block</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">Executor</span>: <span class="ident">sc_executor</span>::<span class="ident">NativeExecutionDispatch</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">backend</span>, <span class="ident">keystore</span>, <span class="ident">task_manager</span>) <span class="op">=</span>
+    <span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">backend</span>, <span class="ident">keystore_container</span>, <span class="ident">task_manager</span>) <span class="op">=</span>
         <span class="ident">sc_service</span>::<span class="ident">new_full_parts</span>::<span class="op">&lt;</span><span class="ident">Block</span>, <span class="ident">Runtime</span>, <span class="ident">Executor</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">config</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">client</span>);
 
@@ -744,12 +688,12 @@
         <span class="ident">babe_link</span>.<span class="ident">clone</span>(),
         <span class="ident">block_import</span>.<span class="ident">clone</span>(),
         <span class="prelude-val">Some</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">justification_import</span>)),
-        <span class="prelude-val">None</span>,
         <span class="ident">client</span>.<span class="ident">clone</span>(),
         <span class="ident">select_chain</span>.<span class="ident">clone</span>(),
         <span class="ident">inherent_data_providers</span>.<span class="ident">clone</span>(),
         <span class="kw-2">&amp;</span><span class="ident">task_manager</span>.<span class="ident">spawn_handle</span>(),
         <span class="ident">config</span>.<span class="ident">prometheus_registry</span>(),
+        <span class="ident">sp_consensus</span>::<span class="ident">CanAuthorWithNativeVersion</span>::<span class="ident">new</span>(<span class="ident">client</span>.<span class="ident">executor</span>().<span class="ident">clone</span>()),
     )<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="ident">import_setup</span> <span class="op">=</span> (<span class="ident">block_import</span>, <span class="ident">grandpa_link</span>, <span class="ident">babe_link</span>);
@@ -757,10 +701,13 @@
     <span class="kw">let</span> (<span class="ident">rpc_extensions_builder</span>, <span class="ident">rpc_setup</span>) <span class="op">=</span> {
         <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">grandpa_link</span>, <span class="ident">babe_link</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">import_setup</span>;
 
+        <span class="kw">let</span> <span class="ident">justification_stream</span> <span class="op">=</span> <span class="ident">grandpa_link</span>.<span class="ident">justification_stream</span>();
         <span class="kw">let</span> <span class="ident">shared_authority_set</span> <span class="op">=</span> <span class="ident">grandpa_link</span>.<span class="ident">shared_authority_set</span>().<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">shared_voter_state</span> <span class="op">=</span> <span class="ident">grandpa</span>::<span class="ident">SharedVoterState</span>::<span class="ident">empty</span>();
-
         <span class="kw">let</span> <span class="ident">rpc_setup</span> <span class="op">=</span> <span class="ident">shared_voter_state</span>.<span class="ident">clone</span>();
+
+        <span class="kw">let</span> <span class="ident">finality_proof_provider</span> <span class="op">=</span>
+            <span class="ident">GrandpaFinalityProofProvider</span>::<span class="ident">new_for_service</span>(<span class="ident">backend</span>.<span class="ident">clone</span>(), <span class="ident">client</span>.<span class="ident">clone</span>());
 
         <span class="kw">let</span> <span class="ident">babe_config</span> <span class="op">=</span> <span class="ident">babe_link</span>.<span class="ident">config</span>().<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">shared_epoch_changes</span> <span class="op">=</span> <span class="ident">babe_link</span>.<span class="ident">epoch_changes</span>().<span class="ident">clone</span>();
@@ -768,13 +715,15 @@
         <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">pool</span> <span class="op">=</span> <span class="ident">transaction_pool</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">select_chain</span> <span class="op">=</span> <span class="ident">select_chain</span>.<span class="ident">clone</span>();
-        <span class="kw">let</span> <span class="ident">keystore</span> <span class="op">=</span> <span class="ident">keystore</span>.<span class="ident">clone</span>();
+        <span class="kw">let</span> <span class="ident">keystore</span> <span class="op">=</span> <span class="ident">keystore_container</span>.<span class="ident">sync_keystore</span>();
+        <span class="kw">let</span> <span class="ident">chain_spec</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">chain_spec</span>.<span class="ident">cloned_box</span>();
 
-        <span class="kw">let</span> <span class="ident">rpc_extensions_builder</span> <span class="op">=</span> <span class="kw">move</span> <span class="op">|</span><span class="ident">deny_unsafe</span><span class="op">|</span> {
+        <span class="kw">let</span> <span class="ident">rpc_extensions_builder</span> <span class="op">=</span> <span class="kw">move</span> <span class="op">|</span><span class="ident">deny_unsafe</span>, <span class="ident">subscription_executor</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">deps</span> <span class="op">=</span> <span class="ident">node_rpc</span>::<span class="ident">FullDeps</span> {
                 <span class="ident">client</span>: <span class="ident">client</span>.<span class="ident">clone</span>(),
                 <span class="ident">pool</span>: <span class="ident">pool</span>.<span class="ident">clone</span>(),
                 <span class="ident">select_chain</span>: <span class="ident">select_chain</span>.<span class="ident">clone</span>(),
+                <span class="ident">chain_spec</span>: <span class="ident">chain_spec</span>.<span class="ident">cloned_box</span>(),
                 <span class="ident">deny_unsafe</span>,
                 <span class="ident">babe</span>: <span class="ident">node_rpc</span>::<span class="ident">BabeDeps</span> {
                     <span class="ident">babe_config</span>: <span class="ident">babe_config</span>.<span class="ident">clone</span>(),
@@ -784,6 +733,9 @@
                 <span class="ident">grandpa</span>: <span class="ident">node_rpc</span>::<span class="ident">GrandpaDeps</span> {
                     <span class="ident">shared_voter_state</span>: <span class="ident">shared_voter_state</span>.<span class="ident">clone</span>(),
                     <span class="ident">shared_authority_set</span>: <span class="ident">shared_authority_set</span>.<span class="ident">clone</span>(),
+                    <span class="ident">justification_stream</span>: <span class="ident">justification_stream</span>.<span class="ident">clone</span>(),
+                    <span class="ident">subscription_executor</span>,
+                    <span class="ident">finality_provider</span>: <span class="ident">finality_proof_provider</span>.<span class="ident">clone</span>(),
                 },
             };
 
@@ -797,7 +749,7 @@
         <span class="ident">client</span>,
         <span class="ident">backend</span>,
         <span class="ident">task_manager</span>,
-        <span class="ident">keystore</span>,
+        <span class="ident">keystore_container</span>,
         <span class="ident">select_chain</span>,
         <span class="ident">import_queue</span>,
         <span class="ident">transaction_pool</span>,
@@ -830,15 +782,14 @@
         <span class="ident">backend</span>,
         <span class="kw-2">mut</span> <span class="ident">task_manager</span>,
         <span class="ident">import_queue</span>,
-        <span class="ident">keystore</span>,
+        <span class="ident">keystore_container</span>,
         <span class="ident">select_chain</span>,
         <span class="ident">transaction_pool</span>,
         <span class="ident">inherent_data_providers</span>,
         <span class="ident">other</span>: (<span class="ident">rpc_extensions_builder</span>, <span class="ident">import_setup</span>, <span class="ident">rpc_setup</span>),
     } <span class="op">=</span> <span class="ident">new_partial</span>(<span class="kw-2">&amp;</span><span class="ident">config</span>)<span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">finality_proof_provider</span> <span class="op">=</span>
-        <span class="ident">GrandpaFinalityProofProvider</span>::<span class="ident">new_for_service</span>(<span class="ident">backend</span>.<span class="ident">clone</span>(), <span class="ident">client</span>.<span class="ident">clone</span>());
+    <span class="kw">let</span> <span class="ident">shared_voter_state</span> <span class="op">=</span> <span class="ident">rpc_setup</span>;
 
     <span class="kw">let</span> (<span class="ident">network</span>, <span class="ident">network_status_sinks</span>, <span class="ident">system_rpc_tx</span>, <span class="ident">network_starter</span>) <span class="op">=</span>
         <span class="ident">sc_service</span>::<span class="ident">build_network</span>(<span class="ident">sc_service</span>::<span class="ident">BuildNetworkParams</span> {
@@ -849,8 +800,6 @@
             <span class="ident">import_queue</span>,
             <span class="ident">on_demand</span>: <span class="prelude-val">None</span>,
             <span class="ident">block_announce_validator_builder</span>: <span class="prelude-val">None</span>,
-            <span class="ident">finality_proof_request_builder</span>: <span class="prelude-val">None</span>,
-            <span class="ident">finality_proof_provider</span>: <span class="prelude-val">Some</span>(<span class="ident">finality_proof_provider</span>.<span class="ident">clone</span>()),
         })<span class="question-mark">?</span>;
 
     <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">offchain_worker</span>.<span class="ident">enabled</span> {
@@ -865,6 +814,8 @@
 
     <span class="kw">let</span> <span class="ident">role</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">role</span>.<span class="ident">clone</span>();
     <span class="kw">let</span> <span class="ident">force_authoring</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">force_authoring</span>;
+    <span class="kw">let</span> <span class="ident">backoff_authoring_blocks</span> <span class="op">=</span>
+        <span class="prelude-val">Some</span>(<span class="ident">sc_consensus_slots</span>::<span class="ident">BackoffAuthoringOnFinalizedHeadLagging</span>::<span class="ident">default</span>());
     <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">network</span>.<span class="ident">node_name</span>.<span class="ident">clone</span>();
     <span class="kw">let</span> <span class="ident">enable_grandpa</span> <span class="op">=</span> <span class="op">!</span><span class="ident">config</span>.<span class="ident">disable_grandpa</span>;
     <span class="kw">let</span> <span class="ident">prometheus_registry</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">prometheus_registry</span>().<span class="ident">cloned</span>();
@@ -874,7 +825,7 @@
         <span class="ident">config</span>,
         <span class="ident">backend</span>: <span class="ident">backend</span>.<span class="ident">clone</span>(),
         <span class="ident">client</span>: <span class="ident">client</span>.<span class="ident">clone</span>(),
-        <span class="ident">keystore</span>: <span class="ident">keystore</span>.<span class="ident">clone</span>(),
+        <span class="ident">keystore</span>: <span class="ident">keystore_container</span>.<span class="ident">sync_keystore</span>(),
         <span class="ident">network</span>: <span class="ident">network</span>.<span class="ident">clone</span>(),
         <span class="ident">rpc_extensions_builder</span>: <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">rpc_extensions_builder</span>),
         <span class="ident">transaction_pool</span>: <span class="ident">transaction_pool</span>.<span class="ident">clone</span>(),
@@ -887,10 +838,10 @@
     })<span class="question-mark">?</span>;
 
     <span class="kw">let</span> (<span class="ident">block_import</span>, <span class="ident">grandpa_link</span>, <span class="ident">babe_link</span>) <span class="op">=</span> <span class="ident">import_setup</span>;
-    <span class="kw">let</span> <span class="ident">shared_voter_state</span> <span class="op">=</span> <span class="ident">rpc_setup</span>;
 
     <span class="kw">if</span> <span class="kw">let</span> <span class="ident">sc_service</span>::<span class="ident">config</span>::<span class="ident">Role</span>::<span class="ident">Authority</span> { .. } <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">role</span> {
         <span class="kw">let</span> <span class="ident">proposer</span> <span class="op">=</span> <span class="ident">sc_basic_authorship</span>::<span class="ident">ProposerFactory</span>::<span class="ident">new</span>(
+            <span class="ident">task_manager</span>.<span class="ident">spawn_handle</span>(),
             <span class="ident">client</span>.<span class="ident">clone</span>(),
             <span class="ident">transaction_pool</span>.<span class="ident">clone</span>(),
             <span class="ident">prometheus_registry</span>.<span class="ident">as_ref</span>(),
@@ -900,7 +851,7 @@
             <span class="ident">sp_consensus</span>::<span class="ident">CanAuthorWithNativeVersion</span>::<span class="ident">new</span>(<span class="ident">client</span>.<span class="ident">executor</span>().<span class="ident">clone</span>());
 
         <span class="kw">let</span> <span class="ident">babe_config</span> <span class="op">=</span> <span class="ident">sc_consensus_babe</span>::<span class="ident">BabeParams</span> {
-            <span class="ident">keystore</span>: <span class="ident">keystore</span>.<span class="ident">clone</span>(),
+            <span class="ident">keystore</span>: <span class="ident">keystore_container</span>.<span class="ident">sync_keystore</span>(),
             <span class="ident">client</span>: <span class="ident">client</span>.<span class="ident">clone</span>(),
             <span class="ident">select_chain</span>,
             <span class="ident">env</span>: <span class="ident">proposer</span>,
@@ -908,6 +859,7 @@
             <span class="ident">sync_oracle</span>: <span class="ident">network</span>.<span class="ident">clone</span>(),
             <span class="ident">inherent_data_providers</span>: <span class="ident">inherent_data_providers</span>.<span class="ident">clone</span>(),
             <span class="ident">force_authoring</span>,
+            <span class="ident">backoff_authoring_blocks</span>,
             <span class="ident">babe_link</span>,
             <span class="ident">can_author_with</span>,
         };
@@ -918,46 +870,10 @@
             .<span class="ident">spawn_blocking</span>(<span class="string">&quot;babe-proposer&quot;</span>, <span class="ident">babe</span>);
     }
 
-    <span class="comment">// Spawn authority discovery module.</span>
-    <span class="kw">if</span> <span class="macro">matches</span><span class="macro">!</span>(<span class="ident">role</span>, <span class="ident">Role</span>::<span class="ident">Authority</span>{..} <span class="op">|</span> <span class="ident">Role</span>::<span class="ident">Sentry</span> {..}) {
-        <span class="kw">let</span> (<span class="ident">sentries</span>, <span class="ident">authority_discovery_role</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">role</span> {
-            <span class="ident">sc_service</span>::<span class="ident">config</span>::<span class="ident">Role</span>::<span class="ident">Authority</span> { <span class="kw-2">ref</span> <span class="ident">sentry_nodes</span> } <span class="op">=</span><span class="op">&gt;</span> (
-                <span class="ident">sentry_nodes</span>.<span class="ident">clone</span>(),
-                <span class="ident">sc_authority_discovery</span>::<span class="ident">Role</span>::<span class="ident">Authority</span>(<span class="ident">keystore</span>.<span class="ident">clone</span>()),
-            ),
-            <span class="ident">sc_service</span>::<span class="ident">config</span>::<span class="ident">Role</span>::<span class="ident">Sentry</span> { .. } <span class="op">=</span><span class="op">&gt;</span> {
-                (<span class="macro">vec</span><span class="macro">!</span>[], <span class="ident">sc_authority_discovery</span>::<span class="ident">Role</span>::<span class="ident">Sentry</span>)
-            }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;Due to outer matches! constraint; qed.&quot;</span>),
-        };
-
-        <span class="kw">let</span> <span class="ident">dht_event_stream</span> <span class="op">=</span> <span class="ident">network</span>
-            .<span class="ident">event_stream</span>(<span class="string">&quot;authority-discovery&quot;</span>)
-            .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">async</span> <span class="kw">move</span> {
-                <span class="kw">match</span> <span class="ident">e</span> {
-                    <span class="ident">Event</span>::<span class="ident">Dht</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>),
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-                }
-            })
-            .<span class="ident">boxed</span>();
-        <span class="kw">let</span> <span class="ident">authority_discovery</span> <span class="op">=</span> <span class="ident">sc_authority_discovery</span>::<span class="ident">AuthorityDiscovery</span>::<span class="ident">new</span>(
-            <span class="ident">client</span>.<span class="ident">clone</span>(),
-            <span class="ident">network</span>.<span class="ident">clone</span>(),
-            <span class="ident">sentries</span>,
-            <span class="ident">dht_event_stream</span>,
-            <span class="ident">authority_discovery_role</span>,
-            <span class="ident">prometheus_registry</span>.<span class="ident">clone</span>(),
-        );
-
-        <span class="ident">task_manager</span>
-            .<span class="ident">spawn_handle</span>()
-            .<span class="ident">spawn</span>(<span class="string">&quot;authority-discovery&quot;</span>, <span class="ident">authority_discovery</span>);
-    }
-
     <span class="comment">// if the node isn&#39;t actively participating in consensus then it doesn&#39;t</span>
     <span class="comment">// need a keystore, regardless of which protocol we use below.</span>
     <span class="kw">let</span> <span class="ident">keystore</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">role</span>.<span class="ident">is_authority</span>() {
-        <span class="prelude-val">Some</span>(<span class="ident">keystore</span> <span class="kw">as</span> <span class="ident">BareCryptoStorePtr</span>)
+        <span class="prelude-val">Some</span>(<span class="ident">keystore_container</span>.<span class="ident">sync_keystore</span>())
     } <span class="kw">else</span> {
         <span class="prelude-val">None</span>
     };
@@ -983,7 +899,6 @@
             <span class="ident">config</span>,
             <span class="ident">link</span>: <span class="ident">grandpa_link</span>,
             <span class="ident">network</span>: <span class="ident">network</span>.<span class="ident">clone</span>(),
-            <span class="ident">inherent_data_providers</span>: <span class="ident">inherent_data_providers</span>.<span class="ident">clone</span>(),
             <span class="ident">telemetry_on_connect</span>: <span class="prelude-val">Some</span>(<span class="ident">telemetry_connection_sinks</span>.<span class="ident">on_connect_stream</span>()),
             <span class="ident">voting_rule</span>: <span class="ident">grandpa</span>::<span class="ident">VotingRulesBuilder</span>::<span class="ident">default</span>().<span class="ident">build</span>(),
             <span class="ident">prometheus_registry</span>,
@@ -995,8 +910,6 @@
         <span class="ident">task_manager</span>
             .<span class="ident">spawn_essential_handle</span>()
             .<span class="ident">spawn_blocking</span>(<span class="string">&quot;grandpa-voter&quot;</span>, <span class="ident">grandpa</span>::<span class="ident">run_grandpa_voter</span>(<span class="ident">grandpa_config</span>)<span class="question-mark">?</span>);
-    } <span class="kw">else</span> {
-        <span class="ident">grandpa</span>::<span class="ident">setup_disabled_grandpa</span>(<span class="ident">client</span>.<span class="ident">clone</span>(), <span class="kw-2">&amp;</span><span class="ident">inherent_data_providers</span>, <span class="ident">network</span>.<span class="ident">clone</span>())<span class="question-mark">?</span>;
     }
 
     <span class="ident">network_starter</span>.<span class="ident">start_network</span>();
@@ -1014,7 +927,7 @@
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>
     (
         <span class="ident">TaskManager</span>,
-        <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">RpcHandlers</span><span class="op">&gt;</span>,
+        <span class="ident">RpcHandlers</span>,
         <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">LightClient</span><span class="op">&lt;</span><span class="ident">Runtime</span>, <span class="ident">Executor</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">NetworkService</span><span class="op">&lt;</span><span class="ident">Block</span>, <span class="op">&lt;</span><span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span><span class="op">&gt;</span>::<span class="ident">Hash</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">Arc</span><span class="op">&lt;</span>
@@ -1033,7 +946,7 @@
         <span class="ident">RuntimeApiCollection</span><span class="op">&lt;</span><span class="ident">StateBackend</span> <span class="op">=</span> <span class="ident">sc_client_api</span>::<span class="ident">StateBackendFor</span><span class="op">&lt;</span><span class="ident">LightBackend</span>, <span class="ident">Block</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">Executor</span>: <span class="ident">sc_executor</span>::<span class="ident">NativeExecutionDispatch</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">backend</span>, <span class="ident">keystore</span>, <span class="kw-2">mut</span> <span class="ident">task_manager</span>, <span class="ident">on_demand</span>) <span class="op">=</span>
+    <span class="kw">let</span> (<span class="ident">client</span>, <span class="ident">backend</span>, <span class="ident">keystore_container</span>, <span class="kw-2">mut</span> <span class="ident">task_manager</span>, <span class="ident">on_demand</span>) <span class="op">=</span>
         <span class="ident">sc_service</span>::<span class="ident">new_light_parts</span>::<span class="op">&lt;</span><span class="ident">Block</span>, <span class="ident">Runtime</span>, <span class="ident">Executor</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">config</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="ident">select_chain</span> <span class="op">=</span> <span class="ident">sc_consensus</span>::<span class="ident">LongestChain</span>::<span class="ident">new</span>(<span class="ident">backend</span>.<span class="ident">clone</span>());
@@ -1046,16 +959,12 @@
         <span class="ident">on_demand</span>.<span class="ident">clone</span>(),
     ));
 
-    <span class="kw">let</span> <span class="ident">grandpa_block_import</span> <span class="op">=</span> <span class="ident">grandpa</span>::<span class="ident">light_block_import</span>(
+    <span class="kw">let</span> (<span class="ident">grandpa_block_import</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">grandpa</span>::<span class="ident">block_import</span>(
         <span class="ident">client</span>.<span class="ident">clone</span>(),
-        <span class="ident">backend</span>.<span class="ident">clone</span>(),
         <span class="kw-2">&amp;</span>(<span class="ident">client</span>.<span class="ident">clone</span>() <span class="kw">as</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>),
-        <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">on_demand</span>.<span class="ident">checker</span>().<span class="ident">clone</span>()),
+        <span class="ident">select_chain</span>.<span class="ident">clone</span>(),
     )<span class="question-mark">?</span>;
-
-    <span class="kw">let</span> <span class="ident">finality_proof_import</span> <span class="op">=</span> <span class="ident">grandpa_block_import</span>.<span class="ident">clone</span>();
-    <span class="kw">let</span> <span class="ident">finality_proof_request_builder</span> <span class="op">=</span>
-        <span class="ident">finality_proof_import</span>.<span class="ident">create_finality_proof_request_builder</span>();
+    <span class="kw">let</span> <span class="ident">justification_import</span> <span class="op">=</span> <span class="ident">grandpa_block_import</span>.<span class="ident">clone</span>();
 
     <span class="kw">let</span> (<span class="ident">babe_block_import</span>, <span class="ident">babe_link</span>) <span class="op">=</span> <span class="ident">sc_consensus_babe</span>::<span class="ident">block_import</span>(
         <span class="ident">sc_consensus_babe</span>::<span class="ident">Config</span>::<span class="ident">get_or_compute</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">client</span>)<span class="question-mark">?</span>,
@@ -1068,17 +977,14 @@
     <span class="kw">let</span> <span class="ident">import_queue</span> <span class="op">=</span> <span class="ident">sc_consensus_babe</span>::<span class="ident">import_queue</span>(
         <span class="ident">babe_link</span>,
         <span class="ident">babe_block_import</span>,
-        <span class="prelude-val">None</span>,
-        <span class="prelude-val">Some</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">finality_proof_import</span>)),
+        <span class="prelude-val">Some</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">justification_import</span>)),
         <span class="ident">client</span>.<span class="ident">clone</span>(),
         <span class="ident">select_chain</span>.<span class="ident">clone</span>(),
         <span class="ident">inherent_data_providers</span>.<span class="ident">clone</span>(),
         <span class="kw-2">&amp;</span><span class="ident">task_manager</span>.<span class="ident">spawn_handle</span>(),
         <span class="ident">config</span>.<span class="ident">prometheus_registry</span>(),
+        <span class="ident">sp_consensus</span>::<span class="ident">NeverCanAuthor</span>,
     )<span class="question-mark">?</span>;
-
-    <span class="kw">let</span> <span class="ident">finality_proof_provider</span> <span class="op">=</span>
-        <span class="ident">GrandpaFinalityProofProvider</span>::<span class="ident">new_for_service</span>(<span class="ident">backend</span>.<span class="ident">clone</span>(), <span class="ident">client</span>.<span class="ident">clone</span>());
 
     <span class="kw">let</span> (<span class="ident">network</span>, <span class="ident">network_status_sinks</span>, <span class="ident">system_rpc_tx</span>, <span class="ident">network_starter</span>) <span class="op">=</span>
         <span class="ident">sc_service</span>::<span class="ident">build_network</span>(<span class="ident">sc_service</span>::<span class="ident">BuildNetworkParams</span> {
@@ -1089,8 +995,6 @@
             <span class="ident">import_queue</span>,
             <span class="ident">on_demand</span>: <span class="prelude-val">Some</span>(<span class="ident">on_demand</span>.<span class="ident">clone</span>()),
             <span class="ident">block_announce_validator_builder</span>: <span class="prelude-val">None</span>,
-            <span class="ident">finality_proof_request_builder</span>: <span class="prelude-val">Some</span>(<span class="ident">finality_proof_request_builder</span>),
-            <span class="ident">finality_proof_provider</span>: <span class="prelude-val">Some</span>(<span class="ident">finality_proof_provider</span>),
         })<span class="question-mark">?</span>;
     <span class="ident">network_starter</span>.<span class="ident">start_network</span>();
 
@@ -1119,8 +1023,8 @@
         <span class="ident">rpc_extensions_builder</span>: <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">sc_service</span>::<span class="ident">NoopRpcExtensionBuilder</span>(<span class="ident">rpc_extensions</span>)),
         <span class="ident">client</span>: <span class="ident">client</span>.<span class="ident">clone</span>(),
         <span class="ident">transaction_pool</span>: <span class="ident">transaction_pool</span>.<span class="ident">clone</span>(),
+        <span class="ident">keystore</span>: <span class="ident">keystore_container</span>.<span class="ident">sync_keystore</span>(),
         <span class="ident">config</span>,
-        <span class="ident">keystore</span>,
         <span class="ident">backend</span>,
         <span class="ident">network_status_sinks</span>,
         <span class="ident">system_rpc_tx</span>,
@@ -1141,7 +1045,7 @@
 <span class="doccomment">/// IPCI chain services.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ipci</span> {
     <span class="kw">use</span> <span class="ident">ipci_runtime</span>::<span class="ident">RuntimeApi</span>;
-    <span class="kw">use</span> <span class="ident">sc_service</span>::{<span class="ident">config</span>::<span class="ident">Configuration</span>, <span class="ident">error</span>::<span class="prelude-ty">Result</span>, <span class="ident">TaskManager</span>};
+    <span class="kw">use</span> <span class="ident">sc_service</span>::{<span class="ident">config</span>::<span class="ident">Configuration</span>, <span class="ident">error</span>::<span class="prelude-ty">Result</span>, <span class="ident">RpcHandlers</span>, <span class="ident">TaskManager</span>};
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;frame-benchmarking&quot;</span>)]</span>
     <span class="ident">sc_executor</span>::<span class="macro">native_executor_instance</span><span class="macro">!</span>(
@@ -1165,16 +1069,16 @@
     }
 
     <span class="doccomment">/// Create a new IPCI service for a light client.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_light</span>(<span class="ident">config</span>: <span class="ident">Configuration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TaskManager</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_light</span>(<span class="ident">config</span>: <span class="ident">Configuration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">TaskManager</span>, <span class="ident">RpcHandlers</span>)<span class="op">&gt;</span> {
         <span class="kw">super</span>::<span class="ident">new_light_base</span>::<span class="op">&lt;</span><span class="ident">RuntimeApi</span>, <span class="ident">Executor</span><span class="op">&gt;</span>(<span class="ident">config</span>)
-            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">task_manager</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">task_manager</span>)
+            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">task_manager</span>, <span class="ident">rpc_handlers</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)<span class="op">|</span> (<span class="ident">task_manager</span>, <span class="ident">rpc_handlers</span>))
     }
 }
 
 <span class="doccomment">///  Robonomics chain services.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">robonomics</span> {
     <span class="kw">use</span> <span class="ident">robonomics_runtime</span>::<span class="ident">RuntimeApi</span>;
-    <span class="kw">use</span> <span class="ident">sc_service</span>::{<span class="ident">config</span>::<span class="ident">Configuration</span>, <span class="ident">error</span>::<span class="prelude-ty">Result</span>, <span class="ident">TaskManager</span>};
+    <span class="kw">use</span> <span class="ident">sc_service</span>::{<span class="ident">config</span>::<span class="ident">Configuration</span>, <span class="ident">error</span>::<span class="prelude-ty">Result</span>, <span class="ident">RpcHandlers</span>, <span class="ident">TaskManager</span>};
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;frame-benchmarking&quot;</span>)]</span>
     <span class="ident">sc_executor</span>::<span class="macro">native_executor_instance</span><span class="macro">!</span>(
@@ -1197,9 +1101,9 @@
             .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">task_manager</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">task_manager</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_light</span>(<span class="ident">config</span>: <span class="ident">Configuration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TaskManager</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_light</span>(<span class="ident">config</span>: <span class="ident">Configuration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">TaskManager</span>, <span class="ident">RpcHandlers</span>)<span class="op">&gt;</span> {
         <span class="kw">super</span>::<span class="ident">new_light_base</span>::<span class="op">&lt;</span><span class="ident">RuntimeApi</span>, <span class="ident">Executor</span><span class="op">&gt;</span>(<span class="ident">config</span>)
-            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">task_manager</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">task_manager</span>)
+            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">task_manager</span>, <span class="ident">rpc_handlers</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)<span class="op">|</span> (<span class="ident">task_manager</span>, <span class="ident">rpc_handlers</span>))
     }
 }
 </pre></div>

@@ -1,4 +1,4 @@
 (function() {var implementors = {};
-implementors["node_cli"] = [{"text":"impl StructOptInternal for Cli","synthetic":false,"types":[]},{"text":"impl StructOptInternal for Subcommand","synthetic":false,"types":[]}];
+implementors["node_cli"] = [{"text":"impl StructOptInternal for Cli","synthetic":false,"types":[]},{"text":"impl StructOptInternal for RunCmd","synthetic":false,"types":[]},{"text":"impl StructOptInternal for Subcommand","synthetic":false,"types":[]}];
 implementors["robonomics_cli"] = [{"text":"impl StructOptInternal for IoCmd","synthetic":false,"types":[]},{"text":"impl StructOptInternal for SinkCmd","synthetic":false,"types":[]},{"text":"impl StructOptInternal for SourceCmd","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

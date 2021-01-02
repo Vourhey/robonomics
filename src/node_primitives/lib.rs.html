@@ -64,6 +64,10 @@
 <span id="63">63</span>
 <span id="64">64</span>
 <span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -105,6 +109,7 @@
 
 <span class="doccomment">/// The type for looking up accounts. We don&#39;t expect more than 4 billion of them.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">AccountIndex</span> <span class="op">=</span> <span class="ident">u32</span>;
+
 <span class="doccomment">/// Balance of an account.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Balance</span> <span class="op">=</span> <span class="ident">u128</span>;
 
@@ -124,10 +129,13 @@
 
 <span class="doccomment">/// Digest item type.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">DigestItem</span> <span class="op">=</span> <span class="ident">generic</span>::<span class="ident">DigestItem</span><span class="op">&lt;</span><span class="ident">Hash</span><span class="op">&gt;</span>;
+
 <span class="doccomment">/// Header type.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Header</span> <span class="op">=</span> <span class="ident">generic</span>::<span class="ident">Header</span><span class="op">&lt;</span><span class="ident">BlockNumber</span>, <span class="ident">BlakeTwo256</span><span class="op">&gt;</span>;
+
 <span class="doccomment">/// Block type.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Block</span> <span class="op">=</span> <span class="ident">generic</span>::<span class="ident">Block</span><span class="op">&lt;</span><span class="ident">Header</span>, <span class="ident">OpaqueExtrinsic</span><span class="op">&gt;</span>;
+
 <span class="doccomment">/// Block ID.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">BlockId</span> <span class="op">=</span> <span class="ident">generic</span>::<span class="ident">BlockId</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span>;
 </pre></div>
