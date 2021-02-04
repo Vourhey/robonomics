@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Call","Dispatchable calls."],["RawEvent","Events for this module."]],"struct":[["Module",""]],"trait":[["Config","Datalog module main trait."],["_","Provides version information about a pallet."]],"type":[["Event","`RawEvent` specialized for the configuration `Config`"]]});
