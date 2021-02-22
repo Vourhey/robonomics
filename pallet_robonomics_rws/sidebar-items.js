@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["CALL_COST","One call cost in quota points (points for 1 sec)."]],"enum":[["Call","Dispatchable calls."],["Error",""],["RawEvent","Events for this module."]],"struct":[["GenesisConfig","Genesis config for the module, allow to build genesis storage."],["Module",""]],"trait":[["Config","RWS module main trait."],["_","Provides version information about a pallet."]],"type":[["Event","`RawEvent` specialized for the configuration `Config`"]]});
+initSidebarItems({"mod":[["pallet",""]]});

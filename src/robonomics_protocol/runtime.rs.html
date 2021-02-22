@@ -68,6 +68,22 @@
 <span id="65">65</span>
 <span id="66">66</span>
 <span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -93,13 +109,21 @@
     <span class="ident">traits</span>::{<span class="ident">BlakeTwo256</span>, <span class="ident">IdentifyAccount</span>, <span class="ident">Verify</span>},
     <span class="ident">MultiSignature</span>, <span class="ident">OpaqueExtrinsic</span>,
 };
-<span class="kw">use</span> <span class="ident">substrate_subxt</span>::{<span class="ident">balances</span>, <span class="ident">extrinsic</span>::<span class="ident">DefaultExtra</span>, <span class="ident">system</span>, <span class="ident">Runtime</span>};
+<span class="kw">use</span> <span class="ident">substrate_subxt</span>::{
+    <span class="ident">balances</span>::{<span class="self">self</span>, <span class="ident">BalancesEventTypeRegistry</span>},
+    <span class="ident">extrinsic</span>::<span class="ident">DefaultExtra</span>,
+    <span class="ident">register_default_type_sizes</span>,
+    <span class="ident">system</span>::{<span class="self">self</span>, <span class="ident">SystemEventTypeRegistry</span>},
+    <span class="ident">EventTypeRegistry</span>, <span class="ident">Runtime</span>,
+};
 
 <span class="doccomment">/// Robonomics Datalog pallet.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pallet_datalog</span>;
+<span class="kw">use</span> <span class="ident">pallet_datalog</span>::<span class="ident">DatalogEventTypeRegistry</span>;
 
 <span class="doccomment">/// Robonomics Launch pallet.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pallet_launch</span>;
+<span class="kw">use</span> <span class="ident">pallet_launch</span>::<span class="ident">LaunchEventTypeRegistry</span>;
 
 <span class="doccomment">/// Robonomics Network family runtimes.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
@@ -111,6 +135,14 @@
 <span class="kw">impl</span> <span class="ident">Runtime</span> <span class="kw">for</span> <span class="ident">Robonomics</span> {
     <span class="kw">type</span> <span class="ident">Signature</span> <span class="op">=</span> <span class="ident">MultiSignature</span>;
     <span class="kw">type</span> <span class="ident">Extra</span> <span class="op">=</span> <span class="ident">DefaultExtra</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
+
+    <span class="kw">fn</span> <span class="ident">register_type_sizes</span>(<span class="ident">event_type_registry</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventTypeRegistry</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>) {
+        <span class="ident">event_type_registry</span>.<span class="ident">with_system</span>();
+        <span class="ident">event_type_registry</span>.<span class="ident">with_balances</span>();
+        <span class="ident">event_type_registry</span>.<span class="ident">with_datalog</span>();
+        <span class="ident">event_type_registry</span>.<span class="ident">with_launch</span>();
+        <span class="ident">register_default_type_sizes</span>(<span class="ident">event_type_registry</span>);
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">system</span>::<span class="ident">System</span> <span class="kw">for</span> <span class="ident">Robonomics</span> {

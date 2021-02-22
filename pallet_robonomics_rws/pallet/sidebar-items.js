@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["CALL_COST","One call cost in quota points (points for 1 sec)."]],"enum":[["Call",""],["Error",""],["Event",""]],"struct":[["Pallet",""]],"trait":[["Config",""]],"type":[["Module","Type alias to `Pallet`, to be used by `construct_runtime`."]]});

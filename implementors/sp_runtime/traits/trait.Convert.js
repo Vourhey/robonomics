@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["parachain_runtime"] = [{"text":"impl Convert&lt;u128, u128&gt; for RelayToNative","synthetic":false,"types":[]},{"text":"impl Convert&lt;u128, u128&gt; for NativeToRelay","synthetic":false,"types":[]},{"text":"impl Convert&lt;&lt;&lt;MultiSignature as Verify&gt;::Signer as IdentifyAccount&gt;::AccountId, [u8; 32]&gt; for AccountId32Convert","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

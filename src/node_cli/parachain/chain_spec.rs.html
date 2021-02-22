@@ -282,6 +282,8 @@
 <span id="279">279</span>
 <span id="280">280</span>
 <span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -302,6 +304,7 @@
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="doccomment">//! Chain specification and utils.</span>
 
+<span class="kw">use</span> <span class="ident">cumulus_primitives_core</span>::<span class="ident">ParaId</span>;
 <span class="kw">use</span> <span class="ident">node_primitives</span>::{<span class="ident">AccountId</span>, <span class="ident">Balance</span>};
 <span class="kw">use</span> <span class="ident">parachain_runtime</span>::{
     <span class="ident">wasm_binary_unwrap</span>, <span class="ident">BalancesConfig</span>, <span class="ident">GenesisConfig</span>, <span class="ident">ParachainInfoConfig</span>, <span class="ident">SudoConfig</span>,
@@ -344,24 +347,24 @@
 <span class="doccomment">/// Specialized `ChainSpec`.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ChainSpec</span> <span class="op">=</span> <span class="ident">sc_service</span>::<span class="ident">GenericChainSpec</span><span class="op">&lt;</span><span class="ident">GenesisConfig</span>, <span class="ident">Extensions</span><span class="op">&gt;</span>;
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_chain_spec</span>(<span class="ident">id</span>: <span class="ident">cumulus_primitives</span>::<span class="ident">ParaId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ChainSpec</span> {
-    <span class="kw">if</span> <span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cumulus_primitives</span>::<span class="ident">ParaId</span>::<span class="ident">from</span>(<span class="ident">EARTH_ID</span>) {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_chain_spec</span>(<span class="ident">id</span>: <span class="ident">ParaId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ChainSpec</span> {
+    <span class="kw">if</span> <span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">ParaId</span>::<span class="ident">from</span>(<span class="ident">EARTH_ID</span>) {
         <span class="kw">return</span> <span class="ident">earth_parachain_config</span>();
     }
 
-    <span class="kw">if</span> <span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cumulus_primitives</span>::<span class="ident">ParaId</span>::<span class="ident">from</span>(<span class="ident">MARS_ID</span>) {
+    <span class="kw">if</span> <span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">ParaId</span>::<span class="ident">from</span>(<span class="ident">MARS_ID</span>) {
         <span class="kw">return</span> <span class="ident">mars_parachain_config</span>();
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rococo-parachain&quot;</span>)]</span>
-    <span class="kw">if</span> <span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cumulus_primitives</span>::<span class="ident">ParaId</span>::<span class="ident">from</span>(<span class="ident">ROCOCO_ID</span>) {
+    <span class="kw">if</span> <span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">ParaId</span>::<span class="ident">from</span>(<span class="ident">ROCOCO_ID</span>) {
         <span class="kw">return</span> <span class="ident">rococo_parachain_config</span>();
     }
 
     <span class="ident">test_chain_spec</span>(<span class="ident">id</span>)
 }
 
-<span class="kw">fn</span> <span class="ident">test_chain_spec</span>(<span class="ident">id</span>: <span class="ident">cumulus_primitives</span>::<span class="ident">ParaId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ChainSpec</span> {
+<span class="kw">fn</span> <span class="ident">test_chain_spec</span>(<span class="ident">id</span>: <span class="ident">ParaId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ChainSpec</span> {
     <span class="kw">let</span> <span class="ident">balances</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
         <span class="ident">get_account_id_from_seed</span>::<span class="op">&lt;</span><span class="ident">sr25519</span>::<span class="ident">Public</span><span class="op">&gt;</span>(<span class="string">&quot;Alice&quot;</span>),
         <span class="ident">get_account_id_from_seed</span>::<span class="op">&lt;</span><span class="ident">sr25519</span>::<span class="ident">Public</span><span class="op">&gt;</span>(<span class="string">&quot;Bob&quot;</span>),
@@ -402,7 +405,7 @@
     <span class="ident">balances</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">AccountId</span>, <span class="ident">Balance</span>)<span class="op">&gt;</span>,
     <span class="ident">sudo_key</span>: <span class="ident">AccountId</span>,
     <span class="ident">code</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="ident">parachain_id</span>: <span class="ident">cumulus_primitives</span>::<span class="ident">ParaId</span>,
+    <span class="ident">parachain_id</span>: <span class="ident">ParaId</span>,
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GenesisConfig</span> {
     <span class="ident">GenesisConfig</span> {
         <span class="ident">frame_system</span>: <span class="prelude-val">Some</span>(<span class="ident">SystemConfig</span> {
@@ -415,6 +418,7 @@
         <span class="ident">pallet_treasury</span>: <span class="prelude-val">Some</span>(<span class="ident">Default</span>::<span class="ident">default</span>()),
         <span class="ident">pallet_sudo</span>: <span class="prelude-val">Some</span>(<span class="ident">SudoConfig</span> { <span class="ident">key</span>: <span class="ident">sudo_key</span> }),
         <span class="ident">parachain_info</span>: <span class="prelude-val">Some</span>(<span class="ident">ParachainInfoConfig</span> { <span class="ident">parachain_id</span> }),
+        <span class="ident">orml_tokens</span>: <span class="prelude-val">Some</span>(<span class="ident">Default</span>::<span class="ident">default</span>()),
     }
 }
 
@@ -530,7 +534,7 @@ fn rococo_parachain_genesis() -&gt; GenesisConfig {
 pub fn rococo_parachain_config() -&gt; ChainSpec {
     let boot_nodes = vec![];
     ChainSpec::from_genesis(
-        &quot;Robonomics PC2&quot;,
+        &quot;Robonomics PC3&quot;,
         &quot;robonomics&quot;,
         ChainType::Live,
         rococo_parachain_genesis,

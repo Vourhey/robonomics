@@ -73,6 +73,10 @@
 <span id="70">70</span>
 <span id="71">71</span>
 <span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -94,14 +98,11 @@
 <span class="doccomment">//! Launch CPS using Robonomics network.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::{<span class="ident">Error</span>, <span class="prelude-ty">Result</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">runtime</span>::<span class="ident">pallet_launch</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">runtime</span>::{<span class="ident">AccountId</span>, <span class="ident">Robonomics</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">runtime</span>::{<span class="ident">pallet_launch</span>::<span class="kw-2">*</span>, <span class="ident">AccountId</span>, <span class="ident">Robonomics</span>};
 
-<span class="kw">use</span> <span class="ident">pallet_launch</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">codec</span>::<span class="ident">Decode</span>;
 <span class="kw">use</span> <span class="ident">sp_core</span>::<span class="ident">crypto</span>::{<span class="ident">Pair</span>, <span class="ident">Ss58Codec</span>};
-<span class="kw">use</span> <span class="ident">substrate_subxt</span>::{
-    <span class="ident">balances</span>::<span class="ident">BalancesEventsDecoder</span>, <span class="ident">EventSubscription</span>, <span class="ident">EventsDecoder</span>, <span class="ident">PairSigner</span>,
-};
+<span class="kw">use</span> <span class="ident">substrate_subxt</span>::{<span class="ident">EventSubscription</span>, <span class="ident">PairSigner</span>};
 
 <span class="doccomment">/// Send launch request using remote Robonomics node.</span>
 <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">submit</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Pair</span><span class="op">&gt;</span>(
@@ -131,20 +132,27 @@
 }
 
 <span class="doccomment">/// Listen for incoming launch requests.</span>
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">listen</span>(<span class="ident">remote</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">EventSubscription</span><span class="op">&lt;</span><span class="ident">Robonomics</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">listen</span>(
+    <span class="ident">remote</span>: <span class="ident">String</span>,
+    <span class="kw-2">mut</span> <span class="ident">callback</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>(<span class="ident">NewLaunchEvent</span><span class="op">&lt;</span><span class="ident">Robonomics</span><span class="op">&gt;</span>),
+) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">substrate_subxt</span>::<span class="ident">ClientBuilder</span>::<span class="op">&lt;</span><span class="ident">Robonomics</span><span class="op">&gt;</span>::<span class="ident">new</span>()
         .<span class="ident">set_url</span>(<span class="ident">remote</span>.<span class="ident">as_str</span>())
         .<span class="ident">build</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="ident">sub</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">subscribe_events</span>().<span class="kw">await</span><span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">decoder</span> <span class="op">=</span> <span class="ident">EventsDecoder</span>::<span class="op">&lt;</span><span class="ident">Robonomics</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="ident">client</span>.<span class="ident">metadata</span>().<span class="ident">clone</span>());
-    <span class="ident">decoder</span>.<span class="ident">with_balances</span>();
-    <span class="ident">decoder</span>.<span class="ident">with_launch</span>();
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sub</span> <span class="op">=</span> <span class="ident">EventSubscription</span>::<span class="op">&lt;</span><span class="ident">Robonomics</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="ident">sub</span>, <span class="ident">decoder</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sub</span> <span class="op">=</span> <span class="ident">EventSubscription</span>::<span class="op">&lt;</span><span class="ident">Robonomics</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="ident">sub</span>, <span class="ident">client</span>.<span class="ident">events_decoder</span>());
     <span class="ident">sub</span>.<span class="ident">filter_event</span>::<span class="op">&lt;</span><span class="ident">NewLaunchEvent</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">raw</span>)) <span class="op">=</span> <span class="ident">sub</span>.<span class="ident">next</span>().<span class="kw">await</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">event</span>) <span class="op">=</span> <span class="ident">NewLaunchEvent</span>::<span class="op">&lt;</span><span class="ident">Robonomics</span><span class="op">&gt;</span>::<span class="ident">decode</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">&amp;</span><span class="ident">raw</span>.<span class="ident">data</span>[..]) {
+            <span class="ident">callback</span>(<span class="ident">event</span>)
+        } <span class="kw">else</span> {
+            <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Unable decode launch event: {:?}&quot;</span>, <span class="ident">raw</span>);
+        }
+    }
 
-    <span class="prelude-val">Ok</span>(<span class="ident">sub</span>)
+    <span class="prelude-val">Ok</span>(())
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "robonomics_protocol";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

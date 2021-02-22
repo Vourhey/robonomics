@@ -65,6 +65,21 @@
 <span id="62">62</span>
 <span id="63">63</span>
 <span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
 <span class="comment">//</span>
@@ -83,50 +98,65 @@
 <span class="comment">//  limitations under the License.</span>
 <span class="comment">//</span>
 <span class="comment">///////////////////////////////////////////////////////////////////////////////</span>
-<span class="doccomment">//! Simple Robonomics datalog runtime module. This can be compiled with `#[no_std]`, ready for Wasm.</span>
+<span class="doccomment">//! XCM version of Robonomics datalog runtime module.</span>
+<span class="doccomment">//! This can be compiled with `#[no_std]`, ready for Wasm.</span>
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>), <span class="ident">no_std</span>)]</span>
 
-<span class="kw">use</span> <span class="ident">codec</span>::<span class="ident">Encode</span>;
-<span class="kw">use</span> <span class="ident">frame_support</span>::{<span class="ident">decl_event</span>, <span class="ident">decl_module</span>};
-<span class="kw">use</span> <span class="ident">frame_system</span>::<span class="ident">ensure_signed</span>;
-<span class="kw">use</span> <span class="ident">sp_std</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">xcm</span>::<span class="ident">v0</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">XcmError</span>, <span class="ident">Junction</span>, <span class="ident">OriginKind</span>, <span class="ident">SendXcm</span>, <span class="ident">Xcm</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pallet</span>::<span class="kw-2">*</span>;
 
-<span class="doccomment">/// Datalog XCM module main trait.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Config</span>: <span class="ident">datalog</span>::<span class="ident">Config</span> {
-    <span class="doccomment">/// The overarching event type.</span>
-    <span class="kw">type</span> <span class="ident">Event</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Event</span><span class="op">&gt;</span>;
-    <span class="doccomment">/// The XCM sender module.</span>
-    <span class="kw">type</span> <span class="ident">XcmSender</span>: <span class="ident">SendXcm</span>;
-    <span class="doccomment">/// Runtime Call type, used for cross-messaging calls.</span>
-    <span class="kw">type</span> <span class="ident">Call</span>: <span class="ident">Encode</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">datalog</span>::<span class="ident">Call</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-}
+<span class="attribute">#[<span class="ident">frame_support</span>::<span class="ident">pallet</span>]</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pallet</span> {
+    <span class="kw">use</span> <span class="ident">frame_support</span>::<span class="ident">pallet_prelude</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">frame_system</span>::<span class="ident">pallet_prelude</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">xcm</span>::<span class="ident">v0</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">XcmError</span>, <span class="ident">Junction</span>, <span class="ident">OriginKind</span>, <span class="ident">SendXcm</span>, <span class="ident">Xcm</span>};
 
-<span class="macro">decl_event</span><span class="macro">!</span> {
-    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-    <span class="kw">where</span> <span class="ident">AccountId</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">AccountId</span>,
-    {
-        <span class="doccomment">/// Record sended to another location.</span>
-        <span class="ident">RecordSentSuccess</span>(<span class="ident">AccountId</span>),
-        <span class="doccomment">/// Record didn&#39;t sent, error attached.</span>
-        <span class="ident">RecordSentFailure</span>(<span class="ident">AccountId</span>, <span class="ident">XcmError</span>),
+    <span class="attribute">#[<span class="ident">pallet</span>::<span class="ident">config</span>]</span>
+    <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Config</span>: <span class="ident">frame_system</span>::<span class="ident">Config</span> <span class="op">+</span> <span class="ident">datalog</span>::<span class="ident">pallet</span>::<span class="ident">Config</span> {
+        <span class="doccomment">/// The overarching event type.</span>
+        <span class="kw">type</span> <span class="ident">Event</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">IsType</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">frame_system</span>::<span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Event</span><span class="op">&gt;</span>;
+        <span class="doccomment">/// The XCM sender module.</span>
+        <span class="kw">type</span> <span class="ident">XcmSender</span>: <span class="ident">SendXcm</span>;
+        <span class="doccomment">/// Runtime Call type, used for cross-messaging calls.</span>
+        <span class="kw">type</span> <span class="ident">Call</span>: <span class="ident">Encode</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">datalog</span>::<span class="ident">pallet</span>::<span class="ident">Call</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>;
     }
-}
 
-<span class="macro">decl_module</span><span class="macro">!</span> {
-    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Module</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw">enum</span> <span class="ident">Call</span> <span class="kw">where</span> <span class="ident">origin</span>: <span class="ident">T</span>::<span class="ident">Origin</span> {
-        <span class="kw">fn</span> <span class="ident">deposit_event</span>() <span class="op">=</span> <span class="ident">default</span>;
+    <span class="attribute">#[<span class="ident">pallet</span>::<span class="ident">event</span>]</span>
+    <span class="attribute">#[<span class="ident">pallet</span>::<span class="ident">generate_deposit</span>(<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">deposit_event</span>)]</span>
+    <span class="attribute">#[<span class="ident">pallet</span>::<span class="ident">metadata</span>(<span class="ident">T</span>::<span class="ident">AccountId</span> <span class="op">=</span> <span class="string">&quot;AccountId&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> {
+        <span class="doccomment">/// Record sended to another location.</span>
+        <span class="ident">RecordSentSuccess</span>(<span class="ident">T</span>::<span class="ident">AccountId</span>),
+        <span class="doccomment">/// Record didn&#39;t sent, error attached.</span>
+        <span class="ident">RecordSentFailure</span>(<span class="ident">T</span>::<span class="ident">AccountId</span>, <span class="ident">XcmError</span>),
+    }
 
-        <span class="attribute">#[<span class="ident">weight</span> <span class="op">=</span> <span class="number">5_000_000</span>]</span>
-        <span class="kw">fn</span> <span class="ident">record</span>(<span class="ident">origin</span>, <span class="ident">parachain_id</span>: <span class="ident">u32</span>, <span class="ident">record</span>: <span class="ident">T</span>::<span class="ident">Record</span>) {
+    <span class="attribute">#[<span class="ident">pallet</span>::<span class="ident">hooks</span>]</span>
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">Hooks</span><span class="op">&lt;</span><span class="ident">BlockNumberFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
+
+    <span class="attribute">#[<span class="ident">pallet</span>::<span class="ident">pallet</span>]</span>
+    <span class="attribute">#[<span class="ident">pallet</span>::<span class="ident">generate_store</span>(<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">trait</span> <span class="ident">Store</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>);
+
+    <span class="attribute">#[<span class="ident">pallet</span>::<span class="ident">call</span>]</span>
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+        <span class="attribute">#[<span class="ident">pallet</span>::<span class="ident">weight</span>(<span class="number">5_000_000</span>)]</span>
+        <span class="kw">fn</span> <span class="ident">record</span>(
+            <span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+            <span class="ident">parachain_id</span>: <span class="ident">u32</span>,
+            <span class="ident">record</span>: <span class="ident">T</span>::<span class="ident">Record</span>,
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DispatchResultWithPostInfo</span> {
             <span class="kw">let</span> <span class="ident">sender</span> <span class="op">=</span> <span class="ident">ensure_signed</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">location</span> <span class="op">=</span> <span class="ident">Junction</span>::<span class="ident">Parachain</span> { <span class="ident">id</span>: <span class="ident">parachain_id</span> };
-            <span class="kw">let</span> <span class="ident">call</span>: <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Call</span> <span class="op">=</span> <span class="ident">datalog</span>::<span class="ident">Call</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>::<span class="ident">record</span>(<span class="ident">record</span>).<span class="ident">into</span>();
-            <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">Xcm</span>::<span class="ident">Transact</span> { <span class="ident">origin_type</span>: <span class="ident">OriginKind</span>::<span class="ident">SovereignAccount</span>, <span class="ident">call</span>: <span class="ident">call</span>.<span class="ident">encode</span>() };
+            <span class="kw">let</span> <span class="ident">call</span>: <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span>::<span class="ident">Call</span> <span class="op">=</span> <span class="ident">datalog</span>::<span class="ident">pallet</span>::<span class="ident">Call</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>::<span class="ident">record</span>(<span class="ident">record</span>).<span class="ident">into</span>();
+            <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">Xcm</span>::<span class="ident">Transact</span> {
+                <span class="ident">origin_type</span>: <span class="ident">OriginKind</span>::<span class="ident">SovereignAccount</span>,
+                <span class="ident">call</span>: <span class="ident">call</span>.<span class="ident">encode</span>(),
+            };
             <span class="kw">match</span> <span class="ident">T</span>::<span class="ident">XcmSender</span>::<span class="ident">send_xcm</span>(<span class="ident">location</span>.<span class="ident">into</span>(), <span class="ident">message</span>.<span class="ident">into</span>()) {
-                <span class="prelude-val">Ok</span>(()) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">deposit_event</span>(<span class="ident">RawEvent</span>::<span class="ident">RecordSentSuccess</span>(<span class="ident">sender</span>)),
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">deposit_event</span>(<span class="ident">RawEvent</span>::<span class="ident">RecordSentFailure</span>(<span class="ident">sender</span>, <span class="ident">e</span>)),
+                <span class="prelude-val">Ok</span>(()) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">deposit_event</span>(<span class="ident">Event</span>::<span class="ident">RecordSentSuccess</span>(<span class="ident">sender</span>)),
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">deposit_event</span>(<span class="ident">Event</span>::<span class="ident">RecordSentFailure</span>(<span class="ident">sender</span>, <span class="ident">e</span>)),
             }
+            <span class="prelude-val">Ok</span>(().<span class="ident">into</span>())
         }
     }
 }
